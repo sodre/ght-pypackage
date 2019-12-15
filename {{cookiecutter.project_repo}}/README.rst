@@ -17,11 +17,8 @@
    :target: https://github.com/psf/black
 
 {% if is_open_source %}
-.. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_repo }}.svg
+.. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_repo }}.svg&style=flat-square
    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_repo }}
-
-.. image:: https://img.shields.io/travis/{{ cookiecutter.github_username }}/{{ cookiecutter.project_repo }}.svg
-   :target: https://travis-ci.org/{{ cookiecutter.github_username }}/{{ cookiecutter.project_repo }}
 
 .. image:: https://readthedocs.org/projects/{{ cookiecutter.project_repo | replace("_", "-") }}/badge/?version=latest
    :target: https://{{ cookiecutter.project_repo | replace("_", "-") }}.readthedocs.io/en/latest/?badge=latest
