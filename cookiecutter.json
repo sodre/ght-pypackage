@@ -7,7 +7,7 @@
   "project_namespace": "{{  cookiecutter.github_organization }}",
   "project_name": "{{ cookiecutter.project_namespace }} Python Boilerplate",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-  "project_repo": "{{ cookiecutter.project_slug.replace('_','-') }}",
+  "project_repo": "{{ cookiecutter.project_namespace }}-{{ cookiecutter.project_slug.replace('_','-') }}",
   "project_short_description": "{{ cookiecutter.project_name }} contains all the boilerplate you need to create a Python package.",
   "noarch_python": "y",
   "use_pytest": "y",
