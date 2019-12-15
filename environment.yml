@@ -6,6 +6,7 @@ dependencies:
   - python 3.7
   - alabaster
   - cookiecutter >=1.4.0
+  - gitpython
   - pytest
   - pytest-cookies
   - pyyaml

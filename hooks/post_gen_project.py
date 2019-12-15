@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import git
 
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
