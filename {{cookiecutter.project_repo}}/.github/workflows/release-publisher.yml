@@ -1,0 +1,105 @@
+{% raw -%}
+name: release publisher
+on:
+  release:
+    types: [published]
+jobs:
+  one:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+
+  setuptools-publish:
+    strategy:
+      matrix:
+{%- endraw %}
+        {%- if cookiecutter.noarch_python == "y" %}
+        os: [ubuntu-latest]
+        python-version: [3.7]
+        {%- else %}
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.6, 3.7, 3.8]
+        {%- endif %}
+{%- raw %}
+    name: setuptools py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    if: github.event.action == 'published'
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1.1.1
+      - run: make dist
+      - name: Upload assets to this release
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: dist/*
+          repo-token:  ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload release to pypi.org
+        if: github.event.repository.private == false
+        env:
+            TWINE_USERNAME: __token__
+            TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run:
+            pip install twine
+            twine upload dist/*
+  conda-publish:
+    strategy:
+      matrix:
+{%- endraw %}
+        {%- if cookiecutter.noarch_python == "y" %}
+        os: [ubuntu-latest]
+        python-version: [3.7]
+        {%- else %}
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.6, 3.7, 3.8]
+        {%- endif %}
+{%- raw %}
+    name: conda py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: s-weigand/setup-conda@master
+        with:
+          python-version: ${{ matrix.python-version }}
+{%- endraw %}
+          conda-channels: anaconda, conda-forge, {{ cookiecutter.anaconda_organization }}
+{%- raw %}
+      - name: Configure conda
+        run: |
+          conda config --set anaconda_upload false
+          conda config --set croot conda-bld
+      - run: conda install conda-build setuptools_scm conda-verify anaconda-client
+      - run: conda build .
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      - run: conda build --output . | xargs conda server upload --private
+        if: github.event.repository.private == true
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      - run: conda build --output . | xargs conda server upload
+        if: github.event.repository.private == false
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+{% endraw -%}

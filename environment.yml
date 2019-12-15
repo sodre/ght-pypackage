@@ -1,0 +1,12 @@
+name: ck-pypackage-dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python 3.7
+  - alabaster
+  - cookiecutter >=1.4.0
+  - pytest
+  - pytest-cookies
+  - pyyaml
+  - watchdog

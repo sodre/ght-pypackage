@@ -1,0 +1,47 @@
+{% raw -%}
+name: detoxify
+on: [push]
+jobs:
+  enforcer:
+    runs-on: ubuntu-latest
+    name: black & flake8
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py3.8-pip-${{ hashFiles('setup.py') }}
+      - run: pip install black flake8
+      - run: black --check .
+      - run: flake8
+  serverless-tox:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.6, 3.7, 3.8]
+    runs-on: ${{  matrix.os }}
+    name: ${{ matrix.os }}-py${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: .eggs
+          key: ${{  matrix.os }}-py${{ matrix.python-version }}-eggs-${{ hashFiles('setup.py') }}
+      - run: python setup.py test
+      - uses: codecov/codecov-action@v1
+        with:
+          name: ${{  matrix.os }}-py${{ matrix.python-version }}
+          fail_ci_if_error: false
+          file: ./coverage.xml
+          yml: .github/codecov.yml
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+{%- endraw %}
