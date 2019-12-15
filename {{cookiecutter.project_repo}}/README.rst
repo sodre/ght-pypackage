@@ -20,7 +20,7 @@
 .. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_repo }}.svg&style=flat-square
    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_repo }}
 
-.. image:: https://readthedocs.org/projects/{{ cookiecutter.project_repo | replace("_", "-") }}/badge/?version=latest
+.. image:: https://readthedocs.org/projects/{{ cookiecutter.project_repo | replace("_", "-") }}/badge/?version=latest&style=flat-square
    :target: https://{{ cookiecutter.project_repo | replace("_", "-") }}.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 {%- endif %}
