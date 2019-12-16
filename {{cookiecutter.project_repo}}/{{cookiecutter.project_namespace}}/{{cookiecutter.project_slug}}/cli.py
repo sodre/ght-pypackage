@@ -9,7 +9,7 @@ from click_plugins import with_plugins
 from entrypoints import get_group_named
 
 
-@with_plugins(get_group_named("{{cookiecutter.project_namespace}}.cli"))
+@with_plugins(get_group_named("{{cookiecutter.project_namespace}}.cli").values())
 @click.group()
 def main(args=None):
     """{{cookiecutter.project_namespace}} command-line-interface"""
