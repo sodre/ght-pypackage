@@ -7,7 +7,6 @@ jobs:
     name: black & flake8
     steps:
       - uses: actions/checkout@master
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - uses: actions/setup-python@v1.1.1
         with:
           python-version: 3.8
@@ -36,6 +35,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{  matrix.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('setup.py') }}
+      - run: python setup.py --version
       - run: pip install . .[test]
       - run: pytest
       - uses: codecov/codecov-action@v1
