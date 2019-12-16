@@ -86,6 +86,11 @@ setup_kwargs = dict(
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
+    extras_require={
+        # fmt: off
+        "test": test_requirements
+        # fmt: on
+    },
     url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}",
     zip_safe=False,
 )

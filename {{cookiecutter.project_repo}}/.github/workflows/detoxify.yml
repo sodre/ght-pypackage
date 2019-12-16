@@ -14,7 +14,7 @@ jobs:
         id: cache
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-py3.8-pip-${{ hashFiles('setup.py') }}
+          key: ${{ runner.os }}-py3.8-pip-${{ hashFiles('.github/workflows/detoxify.yml') }}
       - run: pip install black flake8
       - run: black --check .
       - run: flake8
@@ -33,9 +33,10 @@ jobs:
       - uses: actions/cache@v1
         id: cache
         with:
-          path: .eggs
-          key: ${{  matrix.os }}-py${{ matrix.python-version }}-eggs-${{ hashFiles('setup.py') }}
-      - run: python setup.py test
+          path: ~/.cache/pip
+          key: ${{  matrix.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('setup.py') }}
+      - run: pip install . .[test]
+      - run: pytest
       - uses: codecov/codecov-action@v1
         with:
           name: ${{  matrix.os }}-py${{ matrix.python-version }}
@@ -43,5 +44,4 @@ jobs:
           file: ./coverage.xml
           yml: .github/codecov.yml
           token: ${{ secrets.CODECOV_TOKEN }}
-
 {%- endraw %}
