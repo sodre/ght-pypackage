@@ -106,3 +106,9 @@ ENV/
 
 # IDE settings
 .vscode/
+
+# JetBrains / IntelliJ / IDEA / PyCharm
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
+.idea/shelf/

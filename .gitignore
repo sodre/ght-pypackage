@@ -81,10 +81,8 @@ coverage.xml
 docs/_build/
 
 # IntelliJ Idea family of suites
-.idea
 *.iml
 ## File-based project format:
-*.ipr
 *.iws
 ## mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -99,3 +97,9 @@ cookiecutter-pypackage-env/
 
 # IDE settings
 .vscode/
+
+# JetBrains / IntelliJ / IDEA / PyCharm
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
+.idea/shelf/
