@@ -129,6 +129,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
+    # fmt: off
     (
         master_doc,
         "{{ cookiecutter.project_slug }}.tex",
@@ -136,6 +137,7 @@ latex_documents = [
         "{{ cookiecutter.full_name }}",
         "manual",
     ),
+    # fmt: on
 ]
 
 
@@ -144,7 +146,15 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "{{ cookiecutter.project_slug }}", "{{ cookiecutter.project_name }} Documentation", [author], 1)
+    # fmt: off
+    (
+        master_doc,
+        "{{ cookiecutter.project_slug }}",
+        "{{ cookiecutter.project_name }} Documentation",
+        [author],
+        1
+    )
+    # fmt: on
 ]
 
 
@@ -154,6 +164,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
+    # fmt: off
     (
         master_doc,
         "{{ cookiecutter.project_slug }}",
@@ -163,4 +174,5 @@ texinfo_documents = [
         "One line description of project.",
         "Miscellaneous",
     ),
+    # fmt: on
 ]
