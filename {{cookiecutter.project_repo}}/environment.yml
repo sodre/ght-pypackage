@@ -8,7 +8,7 @@ dependencies:
   - pip
 
   # Setup Requirements (setup.py:setup_requirements)
-  - pytest-runner 5
+  - pytest-runner >=5
   - setuptools_scm
   - wheel
 
@@ -28,7 +28,6 @@ dependencies:
   # Dev Workflow requirements
   - black
   - flake8
-  - bump2version==0.5.11
   - twine
 
 
