@@ -10,7 +10,7 @@
 .. image:: https://img.shields.io/codecov/c/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}?logo=codecov&style=flat-square
 {% else %}
 .. image:: https://codecov.io/gh/{{  cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/branch/master/graph/badge.svg?token=CODECOV_BADGE_TOKEN
-{% endif %}
+{%- endif %}
    :target: https://codecov.io/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}
 
 .. image:: https://img.shields.io/codacy/grade/CODACY_BADGE_TOKEN?logo=codacy&style=flat-square
