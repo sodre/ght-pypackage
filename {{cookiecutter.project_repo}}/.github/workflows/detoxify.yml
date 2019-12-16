@@ -7,6 +7,7 @@ jobs:
     name: black & flake8
     steps:
       - uses: actions/checkout@master
+      - run: git fetch --depth=1 origin +refs/tags/*:refs
       - uses: actions/setup-python@v1.1.1
         with:
           python-version: 3.8
