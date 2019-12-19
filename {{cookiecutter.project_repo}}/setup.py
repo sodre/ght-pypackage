@@ -91,7 +91,7 @@ setup_kwargs = dict(
         "test": test_requirements
         # fmt: on
     },
-    url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}",
+    url="https://github.com/{{ cookiecutter.github_organization}}/{{ cookiecutter.project_repo}}",
     zip_safe=False,
 )
 if "CONDA_BUILD_STATE" in os.environ:
