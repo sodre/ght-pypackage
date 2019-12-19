@@ -69,7 +69,7 @@ def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
     project_path = str(result.project)
     with open(result.project.join('.cookiecutterrc')) as f:
-        ck_params = json.load(f)
+        ck_params = json.load(f)['cookiecutter']
     project_namespace = ck_params['project_namespace']
     project_slug = ck_params['project_slug']
     project_dir = os.path.join(project_path, project_namespace, project_slug)
