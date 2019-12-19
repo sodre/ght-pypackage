@@ -1,6 +1,7 @@
 {# raw is for ignoring templating with cookiecutter, leaving it for use with conda-build #}
 {%- raw %}
 {% set data = load_setup_py_data() %}
+{% set rosetta = data["conda_rosetta_stone"] %}
 {%- endraw %}
 
 package:
@@ -24,14 +25,15 @@ build:
   {% if cookiecutter.noarch_python == 'y' -%}
   noarch: python
   {% endif %}
-  {% if cookiecutter.command_line_interface == 'No' -%}
   {%- raw %}
+  {%- if 'entry_points' in data and 'console_scripts' in data['entry_points'] %}
   entry_points:
-    {% for entry in setup_py['entry_points']['console_scripts'] %}
-      - {{ entry.split('=')[0].strip() }} = {{ entry.split('=')[1].strip() }}
+    {% for entry in data['entry_points']['console_scripts'] %}
+      {%- set kv = entry.split('=') %}
+      - {{ kv[0].strip() }} = {{ kv[1].strip() }}
     {% endfor %}
+  {%- endif %}
   {%- endraw %}
-  {% endif %}
 
 requirements:
   # if you need compilers, uncomment these
@@ -45,7 +47,7 @@ requirements:
     - python {{ data['python_requires'] }}
     - pip
     {% for dep in data['setup_requires'] %}
-    - {{ dep.lower() }}
+    - {{ rosetta.get(dep, dep).lower() }}
     {% endfor %}
     {# raw is for ignoring templating with cookiecutter, leaving it for use with conda-build #}
     {%- endraw %}
@@ -54,7 +56,7 @@ requirements:
     {%- raw %}
     # dependencies are defined in setup.py
     {% for dep in data['install_requires'] %}
-    - {{ dep.lower() }}
+    - {{ rosetta.get(dep, dep).lower() }}
     {% endfor %}
     {%- endraw %}
 
@@ -62,16 +64,21 @@ test:
   source_files:
     - tests
   requires:
-    - pytest
-    - pytest-cov
     {%- raw %}
     # dependencies are defined in setup.py
     {% for dep in data['tests_require'] %}
-    - {{ dep.lower() }}
+    - {{ rosetta.get(dep, dep).lower() }}
     {% endfor %}
     {%- endraw %}
 
   commands:
+    {%- raw %}
+    {%- if 'entry_points' in data and 'console_scripts' in data['entry_points'] %}
+    {%- for entry in data['entry_points']['console_scripts'] %}
+    - {{ entry.split('=')[0].strip() }} --help
+    {%- endfor %}
+    {%- endif %}
+    {%- endraw %}
     - pytest tests
 
 about:

@@ -32,6 +32,10 @@ test_requirements = [
     {%- endif %}
 ]
 
+conda_rosetta_stone = {
+    "pypa-requirement": "conda-dependency"
+}
+
 {%- set license_classifiers = {
     'MIT': 'License :: OSI Approved :: MIT License',
     'BSD': 'License :: OSI Approved :: BSD License',
@@ -94,6 +98,7 @@ setup_kwargs = dict(
     url="https://github.com/{{ cookiecutter.github_organization}}/{{ cookiecutter.project_repo}}",
     zip_safe=False,
 )
+
 if "CONDA_BUILD_STATE" in os.environ:
     try:
         from setuptools_scm import get_version
@@ -105,4 +110,6 @@ if "CONDA_BUILD_STATE" in os.environ:
             "Error: {{ cookiecutter.project_repo }} requires that setuptools_scm be installed with conda-build!"  # noqa: E501
         )
         raise
+    setup_kwargs['conda_rosetta_stone'] = conda_rosetta_stone
+
 setup(**setup_kwargs)
