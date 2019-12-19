@@ -97,6 +97,7 @@ cookiecutter-pypackage-env/
 
 # IDE settings
 .vscode/
+.idea/
 
 # JetBrains / IntelliJ / IDEA / PyCharm
 .idea/workspace.xml
