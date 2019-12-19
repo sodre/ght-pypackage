@@ -197,13 +197,14 @@ def test_bake_with_console_script_cli(cookies):
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
     runner = CliRunner()
-    noarg_result = runner.invoke(cli.main)
+    cli_main = getattr(cli, project_slug)
+    noarg_result = runner.invoke(cli_main)
     assert noarg_result.exit_code == 0
     noarg_output = ' '.join([
         'Replace this message by putting your code into',
         project_slug])
     assert noarg_output in noarg_result.output
-    help_result = runner.invoke(cli.main, ['--help'])
+    help_result = runner.invoke(cli_main, ['--help'])
     assert help_result.exit_code == 0
     assert 'Show this message' in help_result.output
 

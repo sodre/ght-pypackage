@@ -64,11 +64,11 @@ setup_kwargs = dict(
     entry_points={
         {%- if cookiecutter.project_slug == "cli" %}
         "console_scripts": [
-            "{{ cookiecutter.project_namespace }}={{cookiecutter.project_namespace}}.{{ cookiecutter.project_slug }}.cli:main",
+            "{{ cookiecutter.project_namespace }}
         {%- else %}
         "{{cookiecutter.project_namespace}}.cli": [
-            "{{ cookiecutter.project_slug.replace("_","-") }}={{cookiecutter.project_namespace}}.{{ cookiecutter.project_slug }}.cli:main",
-        {%- endif %}
+            "{{ cookiecutter.project_slug.replace("_","-") }}
+        {%- endif -%}={{cookiecutter.project_namespace}}.{{ cookiecutter.project_slug }}.cli:{{ cookiecutter.project_slug }}",
         ],
     },
     # fmt: on

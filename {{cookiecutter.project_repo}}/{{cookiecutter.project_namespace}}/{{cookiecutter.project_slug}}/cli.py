@@ -11,14 +11,14 @@ from entrypoints import get_group_named
 
 @with_plugins(get_group_named("{{cookiecutter.project_namespace}}.cli").values())
 @click.group()
-def main(args=None):
+def {{ cookiecutter.project_slug }}(args=None):
     """{{cookiecutter.project_namespace}} command-line-interface"""
     return 0
 {%- elif cookiecutter.command_line_interface|lower == 'click' %}
 
 
 @click.command()
-def main(args=None):
+def {{ cookiecutter.project_slug }}(args=None):
     """Console script for {{cookiecutter.project_repo}}."""
     # fmt: off
     click.echo("Replace this message by putting your code into "

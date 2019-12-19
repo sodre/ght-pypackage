@@ -1,3 +1,3 @@
 from . import cli
 
-cli.cli()
+cli.{{ cookiecutter.project_slug }}()

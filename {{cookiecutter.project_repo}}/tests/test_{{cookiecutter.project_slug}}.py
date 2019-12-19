@@ -31,14 +31,14 @@ def test_content(response):
 def test_command_line_interface():
     """Test the CLI."""
     runner = CliRunner()
-    result = runner.invoke(cli.main)
+    result = runner.invoke(cli.{{ cookiecutter.project_slug }})
     assert result.exit_code == 0
     {%- if cookiecutter.project_slug != "cli" %}
     assert "Replace this message" in result.output
     {%- else %}
-    assert "Usage: main " in result.output
+    assert "Usage: {{ cookiecutter.project_slug }}" in result.output
     {%- endif %}
-    help_result = runner.invoke(cli.main, ["--help"])
+    help_result = runner.invoke(cli.{{ cookiecutter.project_slug }}, ["--help"])
     assert help_result.exit_code == 0
     assert "--help  Show this message and exit." in help_result.output
 {%- endif %}
