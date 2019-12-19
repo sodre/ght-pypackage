@@ -1,13 +1,33 @@
-name: ck-pypackage-dev
+name: {{ cookiecutter.project_repo }}-dev
 channels:
+  - {{ cookiecutter.anaconda_organization }}
   - conda-forge
   - defaults
 dependencies:
-  - python 3.7
-  - alabaster
-  - cookiecutter >=1.4.0
-  - gitpython
-  - pytest
-  - pytest-cookies
-  - pyyaml
+  - python
+  - pip
+
+  # Setup Requirements (setup.py:setup_requirements)
+  - pytest-runner >=5
+  - setuptools_scm
+  - wheel
+
+  # Install Requirements (setup.py:requirements)
+  - click >=7.0
+  - click-plugins
+  - entrypoints
+
+  # Test Requirements (setup.py:test_requirements)
+  - pytest >=3
+  - pytest-cov
+
+  # Documentation Requirements
+  - sphinx
   - watchdog
+
+  # Dev Workflow requirements
+  - black
+  - flake8
+  - twine
+
+
