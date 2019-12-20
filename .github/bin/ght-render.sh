@@ -7,12 +7,13 @@ render()
 {
     in=$1
     out=$2
+    ght_conf=${3:-$GHT_CONF}
 
     jinja2 \
         --format yaml\
         -e jinja2_time.TimeExtension \
         -o $out \
-        $in $GHT_CONF
+        $in $ght_conf
 }
 
 converged()
@@ -49,7 +50,7 @@ until converged $GHT_CONF $ght_temp; do
         if [ "$stop_rendering_lines" == false ]; then
             echo "Rendering line '$line'"
             out=$(mktemp)
-            render $in $out
+            render $in $out $ght_temp
             cat < $out >> $GHT_CONF
             if ! converged $in $out; then
                 stop_rendering_lines=true
@@ -73,7 +74,6 @@ for filter in "-type d" "-type f"; do
                   git mv $d1 $d2 || true
                 fi
             done
-            sleep 1
     done
 done
 git commit -m 'ght: template structure rendered'
@@ -84,7 +84,7 @@ find . -path ./.git -prune -o -type f  |
     while IFS=$'\n' read -r in; do
         out=$(mktemp)
         echo "rendering ${in}"
-        jinja2 --format yaml -e jinja2_time.TimeExtension -o ${out} ${in} ../.cookiecutterrc
+        render $in $out
         cp -a ${out} ${in}
         git add ${in}
     done
