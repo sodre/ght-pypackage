@@ -1,0 +1,14 @@
+name: jinja2
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pip
+
+  - jinja2
+  - jinja2-time
+  - pip:
+    - jinja2-cli==0.7.0
+
