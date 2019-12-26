@@ -85,4 +85,4 @@ find . -path ./.git -prune -o -type f  |
         cp -a ${out} ${in}
         git add ${in}
     done
-git commit -m 'ght: rendered content'
+git commit -m 'ght: content rendered'
