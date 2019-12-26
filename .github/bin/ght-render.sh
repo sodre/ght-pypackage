@@ -40,15 +40,13 @@ set -e
 ght_temp=$(mktemp)
 declare -i i=1
 until converged $GHT_CONF $ght_temp; do
-    echo "Pass $i"
+    echo "Rendering $GHT_CONF: Pass $i"
     stop_rendering_lines=false
     mv $GHT_CONF $ght_temp
     while IFS= read line; do
         in=$(mktemp)
         printf "%s\n" "$line" > $in
-        echo "Processing line '$line'"
         if [ "$stop_rendering_lines" == false ]; then
-            echo "Rendering line '$line'"
             out=$(mktemp)
             render $in $out $ght_temp
             cat < $out >> $GHT_CONF
@@ -56,7 +54,6 @@ until converged $GHT_CONF $ght_temp; do
                 stop_rendering_lines=true
             fi
         else
-          echo "Not rendering '$line'"
           cat < $in >> $GHT_CONF
         fi
     done < $ght_temp
