@@ -10,30 +10,38 @@ with open("README.rst") as readme_file:
 
 # The requirements section should be kept in sync with the environment.yml file
 requirements = [
+    # fmt: off
     {%- if cookiecutter.command_line_interface|lower == 'click' %}
     "click>=7.0",
     "click-plugins",
     "entrypoints",
     {%- endif %}
+    # fmt: on
 ]
 
 setup_requirements = [
+    # fmt: off
     {%- if cookiecutter.use_pytest == 'y' %}
     "pytest-runner",
     "setuptools_scm",
     "wheel",
     {%- endif %}
+    # fmt: on
 ]
 
 test_requirements = [
+    # fmt: off
     {%- if cookiecutter.use_pytest == 'y' %}
     "pytest>=3",
     "pytest-cov",
     {%- endif %}
+    # fmt: on
 ]
 
 conda_rosetta_stone = {
+    # fmt: off
     "pypa-requirement": "conda-dependency"
+    # fmt: on
 }
 
 {%- set license_classifiers = {
@@ -110,6 +118,6 @@ if "CONDA_BUILD_STATE" in os.environ:
             "Error: {{ cookiecutter.project_repo }} requires that setuptools_scm be installed with conda-build!"  # noqa: E501
         )
         raise
-    setup_kwargs['conda_rosetta_stone'] = conda_rosetta_stone
+    setup_kwargs["conda_rosetta_stone"] = conda_rosetta_stone
 
 setup(**setup_kwargs)
