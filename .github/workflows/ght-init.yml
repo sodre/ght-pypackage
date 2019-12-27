@@ -4,11 +4,6 @@ on:
     branches:
       - master
 jobs:
-
-  create-issue:
-    runs-on: ubuntu-latest
-    steps:
-
   ght-configuration:
     runs-on: ubuntu-latest
     steps:
