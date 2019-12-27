@@ -48,11 +48,14 @@ jobs:
           branch-suffix: none
           commit-message: Add GHT configuration variables
           title: Configure GitHub Template Variables
+          reviewers: ${{ github.actor }}
           body: |
             You are almost there! Here is what is left to do...
 
               - [ ] Configure your [ght.yaml][1] file in this PR
-              - [ ] Once you are satisfied, complete and approve the review request. Do Not Merge!
+              - [ ] Wait for the build checks to pass
+              - [ ] Approve the review request
+              - The bot will render the template in the master branch.
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
 
