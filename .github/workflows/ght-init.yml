@@ -17,27 +17,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install jinja2 jinja2-cli jinja2-time pyyaml
 
-      - name: Create GHT Branch
-        uses: peterjgrainger/action-create-branch@v1.0.0
-        with:
-          branch: ght/master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - name: Create protect branches issue
-        uses: maxkomarychev/oction-create-issue@v0.7.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: Please protect the master and ght branches
-          body: |
-            Thanks for using sodre/ght-pypackage. These steps are hard to automate,
-            and you only need to do them once...
-              - [ ] [Protect][1] your `master` branch.
-              - [ ] [Protect][1] the `ght/master` branch.
-
-            [1]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
-
       - name: Create ght-repository.yaml file
         run: |
           cat > .github/ght-repository.yaml <<-EOF
@@ -60,7 +39,7 @@ jobs:
 
       - name: Setup workflows for rendering repository
         run: |
-          git mv .github/workflows/ght-init.yml .github/workflows/available/ght-init.yml
+          git rm .github/workflows/ght-init.yml
           git mv .github/workflows/available/ght-render-repo.yml .github/workflows
 
       - name: Create Pull Request
@@ -79,3 +58,26 @@ jobs:
               - [ ] Merge
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
+
+      - name: Create GHT Branch
+        uses: peterjgrainger/action-create-branch@v1.0.0
+        with:
+          branch: ght/master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create protect branches issue
+        uses: maxkomarychev/oction-create-issue@v0.7.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Please protect the master and ght branches
+          body: |
+            Thanks for using sodre/ght-pypackage. These steps are hard to automate,
+            and you only need to do them once...
+              - [ ] [Protect][1] your `master` branch.
+              - [ ] [Protect][1] the `ght/master` branch.
+
+            [1]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
+
+
+
