@@ -80,7 +80,7 @@ render_tree_structure()
 render_tree_content()
 {
     find . -path ./.git -prune -o -type f  |
-        grep -v './.git' |
+        grep -v './.git$' |
         sort |
         while IFS=$'\n' read -r in; do
             out=$(mktemp)
