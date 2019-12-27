@@ -1,0 +1,35 @@
+name: ght-init
+on:
+  push:
+    branches:
+      - master
+jobs:
+  ght-init:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Create GHT Branch
+        uses: peterjgrainger/action-create-branch@v1.0.0
+        with:
+          branch: ght
+      - name: create post-generation issue
+        uses: maxkormarychev/oction-create-issue@v0.7.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Post Generation Steps
+          body: |
+            Here is what is left for you to do...
+              - [ ] [Protect][1] the `master` and `ght` branches.
+              - [ ] Render the repository by issuing a pull-request against
+                    the .github/ght.yaml file.
+
+            [1]: https://github.com/sodre/edag-auth/settings/branch_protection_rules/new
+
+      - name: initialized
+        run: git rm .github/workflows/ght-init.yml
+      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+        with:
+          commit_message: GHT Initialized
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
