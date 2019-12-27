@@ -47,9 +47,9 @@ jobs:
           git config --global user.name ${{ github.actor }}
           git config --global user.email ${{ github.actor }}@user.noreply.github.com
           git commit -m "Rendered GitHub Template"
-        if: github.event_name == 'pull_request_review' && github.event.review.state == "approved"
+        if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
 
-#     - uses: ad-m/github-push-action@v0.5.0
-#       if: github.event_name != 'push'
-#       with:
-#         github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ad-m/github-push-action@v0.5.0
+        if: github.event_name != 'pull_request_review' && github.event.review.state == 'approved'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

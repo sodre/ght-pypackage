@@ -53,7 +53,7 @@ jobs:
 
               - [ ] Configure your [ght.yaml][1] file in this PR
               - [ ] Wait for the build to pass...
-              - [ ] Merge
+              - [ ] Review the Pull-Request and Approve it (Do Not Merge)
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
 
