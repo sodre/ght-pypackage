@@ -1,18 +1,33 @@
 ---
 cookiecutter:
-  "full_name": "Patrick Sodré"
-  "github_username": "sodre"
-  "github_organization": "elasticdag"
-  "anaconda_organization" : "{{  cookiecutter.github_organization }}"
-  "email": "{{ cookiecutter.github_username }}@{{ cookiecutter.github_organization }}.io"
-  "project_namespace": "{{  cookiecutter.github_organization }}"
-  "project_name": "{{ cookiecutter.project_namespace }} Python Boilerplate"
-  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}"
-  "project_repo": "{{ cookiecutter.project_namespace }}-{{ cookiecutter.project_slug.replace('_','-') }}"
-  "project_short_description": "{{ cookiecutter.project_name }} contains all the boilerplate you need to create a Python package."
-  "noarch_python": "y"
-  "use_pytest": "y"
-  "add_pyup_badge": "y"
-  "command_line_interface": "Click"
-  "open_source_license": "MIT"
-  "version": "0.0.0"
+  full_name: {{ github.repository.owner.name }}
+  github_username: {{ github.repository.owner.login }}
+  github_organization: {{ github.repository.full_name.split('/')[0] }}
+  anaconda_organization : {{ cookiecutter.github_organization }}
+  email: {{ github.repository.owner.email }}
+  project_namespace: {{ cookiecutter.github_organization }}
+  project_name: {{ cookiecutter.project_namespace }}\'s {{ github.repository.name }}
+  project_slug: {{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}
+  project_repo: {{ github.repository.name }}
+  project_short_description: {{ github.repository.description }}
+  noarch_python: y
+  use_pytest: y
+  add_pyup_badge: y
+
+  #
+  # Please pick one, e.g. command_line_interface: Click
+  command_line_interface:
+    - Click
+    - None
+
+  #
+  # Please pick one, e.g. open_source_license: Proprietary
+  open_source_license:
+    - MIT
+    - BSD
+    - ISC
+    - Apache
+    - GNUv3
+    - Proprietary
+
+  version: 0.0.0
