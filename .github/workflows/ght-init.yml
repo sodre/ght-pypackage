@@ -52,8 +52,7 @@ jobs:
             You are almost there! Here is what is left to do...
 
               - [ ] Configure your [ght.yaml][1] file in this PR
-              - [ ] Wait for the build to pass...
-              - [ ] Review the Pull-Request and Approve it (Do Not Merge)
+              - [ ] Once you are satisfied, complete and approve the review request. Do Not Merge!
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
 
