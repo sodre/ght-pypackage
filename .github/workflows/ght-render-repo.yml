@@ -1,12 +1,19 @@
-name: ght-renderer
+name: ght-render-repo
 on:
+  pull_request:
+    paths:
+      - .github/ght.yaml
+  pull_request_review:
+    types: [ submitted ]
+
   push:
     branches:
       - master
     paths:
       - .github/ght.yaml
+
 jobs:
-  ght-render:
+  ght-render-repo:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,9 +28,28 @@ jobs:
       - run: |
           .github/bin/ght-render.sh render_tree_structure
           .github/bin/ght-render.sh render_tree_content
+
+      # If push (to master branch), then create a pull-request
       - name: Create Pull Request
+        if: github.event_name == 'push'
         uses: peter-evans/create-pull-request@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ght/render
+          branch: ght/configure
           branch-suffix: none
+          commit-message: Render GitHub Template
+          title: Render GitHub Template
+          body: |
+            It looks like you changed your ght.yaml file.
+            This is what the repository should look like now...
+
+      - run: |
+          git config --global user.name ${{ github.actor }}
+          git config --global user.email ${{ github.actor }}@user.noreply.github.com
+          git commit -m "Rendered GitHub Template"
+        if: github.event_name == 'pull_request_review' && github.event.review.state == "approved"
+
+#     - uses: ad-m/github-push-action@v0.5.0
+#       if: github.event_name != 'push'
+#       with:
+#         github_token: ${{ secrets.GITHUB_TOKEN }}
