@@ -37,10 +37,8 @@ jobs:
         run: |
           .github/bin/ght-render.sh render_configuration
 
-      - name: Setup workflows for rendering repository
-        run: |
-          git rm .github/workflows/ght-init.yml
-          git mv .github/workflows/available/ght-render-repo.yml .github/workflows
+      - name: Remove ght-init workflow
+        run: git rm .github/workflows/ght-init.yml
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
