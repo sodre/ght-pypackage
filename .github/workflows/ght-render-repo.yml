@@ -29,13 +29,6 @@ jobs:
           .github/bin/ght-render.sh render_tree_structure
           .github/bin/ght-render.sh render_tree_content
 
-      - name: Review Request Action
-        if: github.event_name == 'pull_request'
-        uses: kunihiko-t/review-request-action@v0.1.3
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: ${{ github.actor }}
-
       - run: |
           git config --global user.name ${{ github.actor }}
           git config --global user.email ${{ github.actor }}@user.noreply.github.com
@@ -43,7 +36,7 @@ jobs:
         if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
 
       - uses: ad-m/github-push-action@v0.5.0
-        if: github.event_name != 'pull_request_review' && github.event.review.state == 'approved'
+        if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
