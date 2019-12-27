@@ -8,17 +8,6 @@ jobs:
   create-ght-branch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Create GHT Branch
-        uses: peterjgrainger/action-create-branch@v1.0.0
-        with:
-          branch: ght/master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  create-issue:
-    runs-on: ubuntu-latest
-    steps:
       - name: create post-generation issue
         uses: maxkomarychev/oction-create-issue@v0.7.1
         with:
@@ -32,10 +21,19 @@ jobs:
 
             [1]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
 
-  render-recipe:
+  ght-configuration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
+      - name: Create GHT Branch
+        uses: peterjgrainger/action-create-branch@v1.0.0
+        with:
+          branch: ght/master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: git rm .github/workflows/ght-init.yml
       - run: |
           echo "github:" >> .github/ght.yaml
           echo "  repository:" >> .github/ght.yaml
@@ -56,27 +54,10 @@ jobs:
           commit-message: Add GHT configuration variables
           title: Configure GitHub Template Variables
           body: |
-            You are almost there! You just need to
+            You are almost there! Here is what is left to do...
 
-              - [ ] Configure yor [ght.yaml][1] file
-              - [ ] Wait for the build to pass
-              - [ ] Squash-and-merge
+              - [ ] Edit/Configure yor [ght.yaml][1] file in this PR
+              - [ ] Wait for the build to pass...
+              - [ ] (Squash-and-)Merge
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
-
-
-  finalize-init:
-    needs:
-      - create-ght-branch
-      - create-issue
-      - render-recipe
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: git rm .github/workflows/ght-init.yml
-      - uses: github-actions-x/commit@v2.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: GHT Initialized
-
-
