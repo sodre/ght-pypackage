@@ -6,11 +6,11 @@ on:
   pull_request_review:
     types: [ submitted ]
 
-  push:
-    branches:
-      - master
-    paths:
-      - .github/ght.yaml
+# push:
+#   branches:
+#     - master
+#   paths:
+#     - .github/ght.yaml
 
 jobs:
   ght-render-repo:
