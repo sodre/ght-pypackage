@@ -30,4 +30,4 @@ def {{ cookiecutter.project_slug }}(args=None):
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    sys.exit({{ cookiecutter.project_slug }})  # pragma: no cover
