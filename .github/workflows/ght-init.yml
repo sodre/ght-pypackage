@@ -53,6 +53,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ght/configure
           branch-suffix: none
+          commit-message: Add GHT configuration variables
+          title: Configure GitHub Template Variables
+          body: |
+            You are almost there! You just need to
+
+              - [ ] Configure yor [ght.yaml][1] file
+              - [ ] Wait for the build to pass
+              - [ ] Squash-and-merge
+
+            [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
 
 
   finalize-init:
