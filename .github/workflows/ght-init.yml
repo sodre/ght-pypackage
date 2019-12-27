@@ -19,7 +19,8 @@ jobs:
 
       - name: Create ght-repository.yaml file
         run: |
-          cat > .github/ght-repository.yaml <<-EOF
+          tmpfile=$(mktemp)
+          cat > $tmpfile <<-EOF
           github:
             repository:
               name: ${{ github.event.repository.name }}
@@ -30,8 +31,7 @@ jobs:
                 login: ${{ github.event.repository.owner.login }}
                 email: ${{ github.event.repository.owner.email }}
           EOF
-          sed -i -e "/$/r .github/ght-repository.yaml" .github/ght.yaml
-          rm -f .github/ght-repository.yaml
+          cat $tmpfile >> .github/ght.yaml
 
       - name: Render ght.yaml configuration
         run: |
