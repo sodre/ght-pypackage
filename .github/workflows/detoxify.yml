@@ -1,5 +1,8 @@
 name: detoxify
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - 'ght/**'
 jobs:
   enforcer:
     runs-on: ubuntu-latest
