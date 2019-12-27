@@ -1,4 +1,3 @@
-{% raw -%}
 name: detoxify
 on: [push]
 jobs:
@@ -45,4 +44,3 @@ jobs:
           file: ./coverage.xml
           yml: .github/codecov.yml
           token: ${{ secrets.CODECOV_TOKEN }}
-{%- endraw %}
