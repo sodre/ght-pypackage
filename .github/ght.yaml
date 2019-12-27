@@ -1,27 +1,13 @@
 ---
 cookiecutter:
-  full_name: "{{ github.repository.owner.name }}"
-  github_username: "{{ github.repository.owner.login }}"
-  github_organization: "{{ github.repository.full_name.split('/')[0] }}"
-  anaconda_organization: "{{ cookiecutter.github_organization }}"
-  email: "{{ github.repository.owner.email }}"
-  project_namespace: "{{ cookiecutter.github_organization }}"
-  project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
-  project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}"
-  project_repo: "{{ github.repository.name }}"
-  project_short_description: "{{ github.repository.description }}"
-  noarch_python: y
-  use_pytest: y
-  add_pyup_badge: y
-
-  #
-  # Please pick one, e.g. command_line_interface: Click
+  # TODO: Enter your name here
+  full_name: "<<< your name goes here >>>"
+  # TODO: Please pick one, e.g. command_line_interface: Click
   command_line_interface:
     - Click
     - None
-
   #
-  # Please pick one, e.g. open_source_license: Proprietary
+  # TODO: Please pick one, e.g. open_source_license: MIT
   open_source_license:
     - MIT
     - BSD
@@ -30,4 +16,21 @@ cookiecutter:
     - GNUv3
     - Proprietary
 
+  #
+  # These were filled using your repository information, you may want to
+  # customize them...
+  anaconda_organization: "{{ cookiecutter.github_organization }}"
+  project_namespace: "{{ cookiecutter.github_organization }}"
+  project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
+  project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}"
+  noarch_python: y
+  use_pytest: y
+  add_pyup_badge: y
   version: 0.0.0
+
+  # Advanced options.. You should probably leave these alone...
+  github_username: "{{ github.repository.owner.login }}"
+  github_organization: "{{ github.repository.full_name.split('/')[0] }}"
+  email: "{{ github.repository.owner.email }}"
+  project_repo: "{{ github.repository.name }}"
+  project_short_description: "{{ github.repository.description }}"

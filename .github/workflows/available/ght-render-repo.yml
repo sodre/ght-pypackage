@@ -1,6 +1,8 @@
 name: ght-renderer
 on:
-  pull_request:
+  push:
+    branches:
+      - master
     paths:
       - .github/ght.yaml
 jobs:
@@ -17,7 +19,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install jinja2 jinja2-cli jinja2-time pyyaml
       - run: |
-          .github/bin/ght-render.sh
+          .github/bin/ght-render.sh render_tree_structure
+          .github/bin/ght-render.sh render_tree_content
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
         with:
