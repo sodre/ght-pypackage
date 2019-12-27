@@ -33,8 +33,9 @@ tree_converged()
     converged $templ $rendered
 }
 
-tmp=$(basename $(mktemp -t ght))
-git checkout -b $tmp master
+# This is so we can test things locally without screwing up the master branch
+# tmp=$(basename $(mktemp -t ght-XXXX))
+# git checkout -b $tmp
 
 set -e
 ght_temp=$(mktemp)
@@ -59,7 +60,7 @@ until converged $GHT_CONF $ght_temp; do
     done < $ght_temp
     let i++
 done
-git commit -m "ght: configuration rendered" $GHT_CONF
+#git commit -m "ght: configuration rendered" $GHT_CONF
 
 
 for filter in "-type d" "-type f"; do
@@ -73,7 +74,7 @@ for filter in "-type d" "-type f"; do
             done
     done
 done
-git commit -m 'ght: template structure rendered'
+#git commit -m 'ght: template structure rendered'
 
 find . -path ./.git -prune -o -type f  |
     grep -v './.git' |
@@ -85,4 +86,4 @@ find . -path ./.git -prune -o -type f  |
         cp -a ${out} ${in}
         git add ${in}
     done
-git commit -m 'ght: content rendered'
+#git commit -m 'ght: content rendered'

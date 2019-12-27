@@ -4,32 +4,69 @@ on:
     branches:
       - master
 jobs:
-  ght-init:
+
+  create-ght-branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: Create GHT Branch
         uses: peterjgrainger/action-create-branch@v1.0.0
         with:
-          branch: ght
+          branch: ght/master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create-issue:
+    runs-on: ubuntu-latest
+    steps:
       - name: create post-generation issue
         uses: maxkomarychev/oction-create-issue@v0.7.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: Post Generation Steps
+          title: Please protect the master and ght branches
           body: |
-            Here is what is left for you to do...
-              - [ ] [Protect][1] the `master` and `ght` branches.
-              - [ ] Render the repository by issuing a pull-request against
-                    the .github/ght.yaml file.
+            Thanks for using sodre/ght-pypackage. These steps are hard to automate,
+            and you only need to do them once...
+              - [ ] [Protect][1] your `master` branch.
+              - [ ] [Protect][1] the `ght/master` branch.
 
-            [1]: https://github.com/sodre/edag-auth/settings/branch_protection_rules/new
+            [1]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
 
-      - name: initialized
-        run: git rm .github/workflows/ght-init.yml
-      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+  render-recipe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+          echo "github:" >> .github/ght.yaml
+          echo "  repository:" >> .github/ght.yaml
+          echo "    name: ${{ github.event.repository.name }}" >> .github/ght.yaml
+          echo "    full_name: ${{ github.event.repository.full_name }}" >> .github/ght.yaml
+          echo "    description: ${{ github.event.repository.description }}" >> .github/ght.yaml
+          echo "    private: ${{ github.event.repository.private }}" >> .github/ght.yaml
+          echo "    owner:" >> .github/ght.yaml
+          echo "      name: ${{ github.event.repository.owner.name }}" >> .github/ght.yaml
+          echo "      login: ${{ github.event.repository.owner.login }}" >> .github/ght.yaml
+          echo "      email: ${{ github.event.repository.owner.email }}" >> .github/ght.yaml
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v1
         with:
-          commit_message: GHT Initialized
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ght/configure
+          branch-suffix: none
+
+
+  finalize-init:
+    needs:
+      - create-ght-branch
+      - create-issue
+      - render-recipe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: git rm .github/workflows/ght-init.yml
+      - uses: github-actions-x/commit@v2.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: GHT Initialized
+
 
