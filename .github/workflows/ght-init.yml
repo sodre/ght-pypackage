@@ -17,6 +17,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install jinja2 jinja2-cli jinja2-time pyyaml
 
+      - name: Here is what is available during Initial Commit
+        run: jq . $GITHUB_EVENT_PATH
+
       - name: Create ght-repository.yaml file
         run: |
           tmpfile=$(mktemp)
