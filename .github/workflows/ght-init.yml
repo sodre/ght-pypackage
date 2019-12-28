@@ -36,8 +36,8 @@ jobs:
           tmpfile=$(mktemp)
           cat > $tmpfile <<-EOF
 
-          # These were picked up the Initial Commit...
-          # Do not modify them...
+          #
+          # These were picked up during Initial Commit...
           github:
             author:
               email: ${{ github.event.head_commit.author.email }}
@@ -64,7 +64,8 @@ jobs:
           branch-suffix: none
           commit-message: Start ght-render configuration
           title: ght-render configuration
-          reviewers: ${{ github.actor }}
+          assignees: ${{ github.actor }}
+          labels: ght
           body: |
             Use this PR to edit your ght-render configuration file [ght.yaml][1]
 
