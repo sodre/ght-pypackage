@@ -48,10 +48,10 @@ Features
 
 * TODO
 
-Credits
+
 -------
 
-This package was created with Cookiecutter_ and the `sodre/cookiecutter-pypackage`_ project template.
+This package was created with ght-render_ and the `sodre/ght-pypackage`_ project template.
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`sodre/cookiecutter-pypackage`: https://github.com/sodre/cookiecutter-pypackage
+.. _ght-render: https://github.com/sodre/action-ght-render
+.. _`sodre/ght-pypackage`: https://github.com/sodre/ght-pypackage
