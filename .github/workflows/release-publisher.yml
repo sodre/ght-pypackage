@@ -1,63 +1,208 @@
+name: release-publisher
 on:
   release:
     types:
       - published
+  pull_request:
+    branches_ignore:
+      - 'ght/**'
 jobs:
-
   #
   # Create the Source Distribution
-  setuptools-publish:
+  create-sdist:
+    name: setuptools py${{ matrix.python-version }}
     strategy:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.7]
-    name: setuptools py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    if: github.event.action == 'published'
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v1.1.1
-      - run: make dist
+      - run: python setup.py sdist
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: setuptools-sdist
+          path: dist
+
+  #
+  # Create the binary distribution wheels
+  create-bdist-wheel:
+    name: bdist_wheel py${{ matrix.python-version }}
+    needs:
+      - create-sdist
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.7]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download Source Distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: setuptools-sdist
+          path: .
+      # TODO: This piece can be improved, e.g. ensuring we are deleting the same file
+      - name: Unpack Source Distribution
+        run: |
+          tar -xvf *.tar.gz --strip 1
+          rm -f *.tar.gz
+
+      # Create the bdist wheel file
+      - uses: actions/setup-python@v1.1.1
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: .eggs
+          key: ${{  matrix.os }}-${{ matrix.python-version }}-eggs-${{ hashFiles('setup.py') }}
+      - run: python setup.py bdist_wheel
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: setuptools-bdist-wheel
+          path: dist
+
+  #
+  # Publish The SetupTools Distributions
+  setuptools-publish:
+    name: publisher
+    if: github.event_name == 'release'
+    needs:
+      - create-sdist
+      - create-bdist-wheel
+    strategy:
+      matrix:
+        artifact-name:
+          - setuptools-sdist
+          - setuptools-bdist-wheel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Source Distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: dist
+
+      #
+      # Publish Release Asset (to GitHub)
       - name: Upload assets to this release
         uses: AButler/upload-release-assets@v2.0
         with:
           files: dist/*
           repo-token:  ${{ secrets.GITHUB_TOKEN }}
+
+      #
+      # Publish to PyPi if Public Repository
+      - uses: actions/setup-python@v1.1.1
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: .eggs
+          key: ${{  matrix.os }}-${{ matrix.python-version }}-eggs-twine
       - name: Upload release to pypi.org
         if: github.event.repository.private == false
         env:
-            TWINE_USERNAME: __token__
-            TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-            pip install twine
-            twine upload dist/*
+          pip install twine
+          twine upload dist/*
 
   #
   # Create Conda Distribution
-  conda-publish:
+  create-conda-build-noarch:
+    name: conda py${{ matrix.python-version }}
+    needs:
+      - create-sdist
     strategy:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.7]
-    name: conda py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@master
-      - uses: goanpeca/setup-miniconda@1.0.2
+      - name: Download Source Distribution
+        uses: actions/download-artifact@v1.0.0
         with:
-          python-version: ${{ matrix.python-version }}
-          conda-build: 3.18
-          condarc-file: .github/condarc.yml
+          name: setuptools-sdist
+          path: .
+      # TODO: This piece can be improved, e.g. ensuring we are deleting the same file
+      - name: Unpack Source Distribution
+        run: |
+          tar -xvf *.tar.gz --strip 1
+          rm -f *.tar.gz
+
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          activate-environment: ''
           auto-activate-base: true
-      - run: conda install setuptools_scm conda-verify anaconda-client
-      - run: conda build .
+          conda-build-version: 3.18
+          condarc-file: .github/condarc.yml
+      - run: conda install setuptools_scm conda-verify
+      - run: conda render . > rendered-meta.yaml
+      - uses: actions/cache@v1
+        id: conda-pkgs-cache
+        with:
+          path: /usr/share/miniconda/pkgs
+          key: ${{  runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('rendered-meta.yaml') }}
+
+      # TODO: We have to create an Anaconda token file to download private packages
+      - name: Run conda build
+        run: |
+          mkdir conda-bld
+          conda build --output-folder conda-bld .
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
-      - run: conda build --output . | xargs conda server upload --private
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: conda-build-noarch
+          path: conda-bld
+
+  #
+  # Publish Conda Package to Anaconda Cloud
+  conda-publish:
+    name: publisher
+    if: github.event_name == 'release'
+    needs:
+      - create-conda-build-noarch
+    strategy:
+      matrix:
+        artifact-name:
+          - conda-build-noarch
+    runs-on: ubuntu-latest
+    steps:
+      - name: download conda build distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: .
+
+      # This is part of publishing...
+      - run: |
+          for subdir in $(jq -r .subdirs[] channeldata.json); do
+            for pkg in $(jq -r '.packages | to_entries[] | .key' $subdir/repodata.json); do
+              echo $subdir/$pkg
+            done
+          done > conda-bld-manifest
+          cat conda-bld-manifest
+
+      # Publish to Anaconda Cloud / Public and Private repos
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          activate-environment: ''
+          auto-activate-base: true
+          conda-build-version: 3.18
+          condarc-file: .github/condarc.yml
+      - uses: actions/cache@v1
+        id: conda-pkgs-cache
+        with:
+          path: /usr/share/miniconda/pkgs
+          key: ${{  runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('.github/release-publisher.yml') }}
+      - run: conda install anaconda-client
+
+      - run: cat conda-bld-manifest | xargs conda server upload --private
         if: github.event.repository.private == true
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
-      - run: conda build --output . | xargs conda server upload
+      - run: cat conda-bld-manifest| xargs conda server upload
         if: github.event.repository.private == false
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
