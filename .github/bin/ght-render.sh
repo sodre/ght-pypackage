@@ -107,11 +107,17 @@ render_tree_ght_content()
     #git commit -m 'ght: *.j2 content rendered and renamed'
 }
 
+remove_workflows()
+{
+   git rm -f .github/workflows/ght-init.yml
+   git rm -f .github/workflows/ght-render-repo.yml
+}
+
 # This is so we can test things locally without screwing up the master branch
 # tmp=$(basename $(mktemp -t ght-XXXX))
 # git checkout -b $tmp
 
-cmd=$1
+cmd=${1//-/_}
 if [ ! -z "$cmd" ]; then
     shift 1
     $cmd "$@"

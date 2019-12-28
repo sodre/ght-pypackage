@@ -15,7 +15,7 @@ jobs:
       - name: Get last Merge Commit of the ght/render branch to Master
         id: last-render
         run: |
-          last_render=$(git log --merges -1 --grep 'ght/render$' --pretty=format:'%H')
+          last_render=$(git log --merges -1 --grep 'ght/render' --pretty=format:'%H')
           if [ -z $last_render ]; then
             last_render=master
           fi
@@ -44,14 +44,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install jinja2 jinja2-cli jinja2-time pyyaml
       - run: |
-          .github/bin/ght-render.sh render_tree_structure
-          .github/bin/ght-render.sh render_tree_ght_content
-          .github/bin/ght-render.sh render_tree_content
-
-      - name: Remove ght workflows
-        run: |
-          git rm -f .github/workflows/ght-init.yml
-          git rm -f .github/workflows/ght-render-repo.yml
+          .github/bin/ght-render.sh render-tree-structure
+          .github/bin/ght-render.sh render-tree-ght_content
+          .github/bin/ght-render.sh render-tree-content
+          .github/bin/ght-render.sh remove-workflows
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
@@ -59,14 +55,33 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: master
           branch: ght/render
-          branch-suffix: none
-          commit-message: (Re-)Render GitHub Template
-          title: (Re-)Render ght/master into master
+          branch-suffix: timestamp
+          commit-message: |
+            Render ght/master into master
+
+            This commit was obtained as follows:
+              1. Checkout the last merged rendering of ght/master
+                 git checkout ${{ steps.last-render.outputs.treeish }}
+              2. Replace its contents with ght/master
+                 git rm -rf .
+                 git checkout origin/ght/master -- .
+              3. Load the configured ght.yaml from PR #${{ github.event.number }} file
+                 git checkout ${{ github.sha }} -- .github/ght.yaml
+              4. Execute the rendering steps
+                 .github/bin/ght-render.sh render_tree_structure
+                 .github/bin/ght-render.sh render_tree_ght_content
+                 .github/bin/ght-render.sh render_tree_content
+                 .github/bin/ght-render.sh finish
+              5. Commit
+                 git commit
+
+          title: Render ght/master into master
           reviewers: ${{ github.actor }}
           body: |
-            This is it! If this is the first rendering, you should be able to just merge
-            the PR as is.
+            Please review the changes and fix any conflicts before merging.
 
-            Otherwise, please review the changes and fix any conflicts before merging.
+            If the configuration variables were incorrect, please close this PR and
+            use your ght-configure PR #${{ github.event.number }} to edit the values.
+
 
 
