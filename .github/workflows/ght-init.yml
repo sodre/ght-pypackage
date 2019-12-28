@@ -58,6 +58,7 @@ jobs:
         uses: peter-evans/create-pull-request@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: ght/master
           branch: ght/configure
           branch-suffix: none
           commit-message: Start GHT configuration step
