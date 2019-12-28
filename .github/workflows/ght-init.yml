@@ -35,6 +35,7 @@ jobs:
         run: |
           tmpfile=$(mktemp)
           cat > $tmpfile <<-EOF
+
           # These were picked up the Initial Commit...
           # Do not modify them...
           github:
@@ -61,17 +62,14 @@ jobs:
           base: ght/master
           branch: ght/configure
           branch-suffix: none
-          commit-message: Start GHT configuration step
-          title: Configure GitHub Template Variables
+          commit-message: Start ght-render configuration
+          title: ght-render configuration
           reviewers: ${{ github.actor }}
           body: |
-            In this PR you will configure the variables for rendering you template.
+            Use this PR to edit your ght-render configuration file [ght.yaml][1]
 
-              - [ ] Configure your [ght.yaml][1]
-              - [ ] Wait for the build checks to pass
-              - [ ] (Squash)-Merge the PR
-
-            GitHub will start a new PR against the `master` branch with the rendered template.
+            Once a valid configuration is supplied, ght-render will create a separate pull-request
+            with the rendered template.
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
 
