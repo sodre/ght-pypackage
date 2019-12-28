@@ -1,0 +1,6 @@
+anaconda_upload: false
+channels:
+  - {{ cookiecutter.anaconda_organization }}
+  - defaults
+  - conda-forge
+show_channel_urls: true

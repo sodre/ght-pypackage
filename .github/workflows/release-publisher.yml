@@ -1,0 +1,63 @@
+on:
+  release:
+    types:
+      - published
+jobs:
+
+  #
+  # Create the Source Distribution
+  setuptools-publish:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.7]
+    name: setuptools py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    if: github.event.action == 'published'
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1.1.1
+      - run: make dist
+      - name: Upload assets to this release
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: dist/*
+          repo-token:  ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload release to pypi.org
+        if: github.event.repository.private == false
+        env:
+            TWINE_USERNAME: __token__
+            TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+            pip install twine
+            twine upload dist/*
+
+  #
+  # Create Conda Distribution
+  conda-publish:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.7]
+    name: conda py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: goanpeca/setup-miniconda@1.0.2
+        with:
+          python-version: ${{ matrix.python-version }}
+          conda-build: 3.18
+          condarc-file: .github/condarc.yml
+          auto-activate-base: true
+      - run: conda install setuptools_scm conda-verify anaconda-client
+      - run: conda build .
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      - run: conda build --output . | xargs conda server upload --private
+        if: github.event.repository.private == true
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      - run: conda build --output . | xargs conda server upload
+        if: github.event.repository.private == false
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
