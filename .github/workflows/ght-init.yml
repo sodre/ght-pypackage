@@ -72,18 +72,34 @@ jobs:
             Once a valid configuration is supplied, ght-render will create a separate pull-request
             with the rendered template.
 
-            [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
+            Here is a list of things that  I can't automatte yet:
+              - [ ] [Protect][2] your `master` branch.
+              - [ ] Configure codecov.io:
+                  - [ ] Add [CODECOV_TOKEN][codedov] to [GitHub Secrets][secrets]
+                  - [ ] (private repo) Add [CODECOV_BADGE_TOKEN][codecov] to [ght.yaml][1]
+              - [ ] Configure codacy.com:
+                  - [ ] Add your [CODACY_API_TOKEN][codacy] to [GitHub Secrets][secrets]
+                  - [ ] (private repo) Add your [CODACY_BADGE_TOKEN][codacy] to [ght.yaml][1]
+              - [ ] Configure anaconda.org
+                  - [ ] Create an upload token with `api:read, api:write, conda` scopes
+                      ```
+                        anaconda auth -c -n ${{ github.repository }}-rw -o ${{ github.repository }} -s "api:read api:write conda"
+                      ```
+                  - [ ] Add the ANACONDA_API_TOKEN from above to [GitHub Secrets][secrets]
+              - [ ] (public repos) Configure PyPi.org
+                  - [ ] Add your [PYPI_API_TOKEN][pypi] to [GitHub Secrets][secrets]
 
-      - name: Create protect branches issue
+            [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
+            [2]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
+            [codecov]: https://codecov.io/gh/${github.repository}/settings
+            [codacy]: https://app.codacy.com/manual/${{github.repository}}/settings
+            [secrets]: https://github.com/${{github.repository}}/settings/secrets/new
+
+      - name: Remind owner to replace their PyPi
         uses: maxkomarychev/oction-create-issue@v0.7.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: Please protect the master and ght branches
+          title: Replace PyPi Personal Access Token with package restricted one
           body: |
-            Thanks for using sodre/ght-pypackage. These steps are hard to automate,
-            and you only need to do them once...
-              - [ ] [Protect][1] your `master` branch.
-              - [ ] [Protect][1] the `ght/master` branch.
-
-            [1]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
-
+            This is a reminder that after you have uploaded the first version of your package
+            to PyPi, that you should replace your PAT with a package-restricted one.
