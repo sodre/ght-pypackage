@@ -9,6 +9,7 @@ dependencies:
 
   - jinja2
   - jinja2-time
+  - pyyaml
   - pip:
     - jinja2-cli==0.7.0
 
