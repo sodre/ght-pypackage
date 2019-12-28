@@ -24,15 +24,18 @@ jobs:
         run: |
           tmpfile=$(mktemp)
           cat > $tmpfile <<-EOF
+          # These were picked up the Initial Commit...
+          # Do not modify them...
           github:
+            author:
+              email: ${{ github.event.head_commit.author.email }}
+              name: ${{ github.event.head_commit.author.name }}
+              username: ${{ github.event.head_commit.author.username }}
             repository:
               name: ${{ github.event.repository.name }}
               full_name: ${{ github.event.repository.full_name }}
               description: ${{ github.event.repository.description }}
               private: ${{ github.event.repository.private }}
-              owner:
-                login: ${{ github.event.repository.owner.login }}
-                email: ${{ github.event.repository.owner.email }}
           EOF
           cat $tmpfile >> .github/ght.yaml
 

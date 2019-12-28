@@ -1,7 +1,6 @@
 ---
 cookiecutter:
-  # TODO: Enter your name here
-  full_name: "<<< your name goes here >>>"
+  #
   # TODO: Please pick one, e.g. command_line_interface: Click
   command_line_interface:
     - Click
@@ -17,12 +16,15 @@ cookiecutter:
     - Proprietary
 
   #
-  # These were filled using your repository information, you may want to
-  # customize them...
-  anaconda_organization: "{{ cookiecutter.github_organization }}"
+  # These were guess based on the repository information
+  # You probably want to customize them.
   project_namespace: "{{ cookiecutter.github_organization }}"
-  project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
   project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}"
+  project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
+
+  #
+  # These are likely correct...
+  anaconda_organization: "{{ cookiecutter.github_organization }}"
 
   #
   # These should not be changed at the moment...
@@ -32,9 +34,10 @@ cookiecutter:
   version: 0.0.0
 
   #
-  # Advanced options.. You should probably leave these alone...
-  github_username: "{{ github.repository.owner.login }}"
+  # These should probably be left alone. They came from github
+  full_name: "{{ github.author.name }}"
+  email: "{{ github.author.email }}"
+  github_username: "{{ github.author.username }}"
   github_organization: "{{ github.repository.full_name.split('/')[0] }}"
-  email: "{{ github.repository.owner.email }}"
   project_repo: "{{ github.repository.name }}"
   project_short_description: "{{ github.repository.description }}"
