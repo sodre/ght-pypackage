@@ -23,11 +23,15 @@ cookiecutter:
   project_namespace: "{{ cookiecutter.github_organization }}"
   project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
   project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}"
+
+  #
+  # These should not be changed at the moment...
   noarch_python: y
   use_pytest: y
   add_pyup_badge: y
   version: 0.0.0
 
+  #
   # Advanced options.. You should probably leave these alone...
   github_username: "{{ github.repository.owner.login }}"
   github_organization: "{{ github.repository.full_name.split('/')[0] }}"
