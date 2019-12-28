@@ -27,6 +27,7 @@ jobs:
           pip install jinja2 jinja2-cli jinja2-time pyyaml
       - run: |
           .github/bin/ght-render.sh render_tree_structure
+          .github/bin/ght-render.sh render_tree_ght_content
           .github/bin/ght-render.sh render_tree_content
 
       - run: |

@@ -92,6 +92,20 @@ render_tree_content()
     #git commit -m 'ght: content rendered'
 }
 
+render_tree_ght_content()
+{
+    find . -path ./.github -prune -o -type f -name '*.ght' |
+        sort |
+        while IFS=$'\n' read -r in; do
+            out=${in/.ght/}
+            echo "rendering ${in}"
+            render $in $out
+            git rm ${in}
+            git add ${out}
+        done
+    #git commit -m 'ght: *.j2 content rendered and renamed'
+}
+
 # This is so we can test things locally without screwing up the master branch
 # tmp=$(basename $(mktemp -t ght-XXXX))
 # git checkout -b $tmp
