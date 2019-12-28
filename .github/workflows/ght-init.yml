@@ -8,6 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Create GHT Branch
+        uses: peterjgrainger/action-create-branch@v1.0.0
+        with:
+          branch: ght/master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -43,34 +50,26 @@ jobs:
         run: |
           .github/bin/ght-render.sh render_configuration
 
-      - name: Remove ght-init workflow
-        run: git rm .github/workflows/ght-init.yml
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: ght/master
           branch: ght/configure
           branch-suffix: none
-          commit-message: Add GHT configuration variables
+          commit-message: Start GHT configuration step
           title: Configure GitHub Template Variables
           reviewers: ${{ github.actor }}
           body: |
-            You are almost there! Here is what is left to do...
+            In this PR you will configure the variables for rendering you template.
 
-              - [ ] Configure your [ght.yaml][1] file in this PR
+              - [ ] Configure your [ght.yaml][1]
               - [ ] Wait for the build checks to pass
-              - [ ] Approve the review request
-              - The bot will render the template in the master branch.
+              - [ ] (Squash)-Merge the PR
+
+            GitHub will start a new PR against the `master` branch with the rendered template.
 
             [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
-
-      - name: Create GHT Branch
-        uses: peterjgrainger/action-create-branch@v1.0.0
-        with:
-          branch: ght/master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create protect branches issue
         uses: maxkomarychev/oction-create-issue@v0.7.1

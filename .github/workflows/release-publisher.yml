@@ -4,8 +4,8 @@ on:
     types:
       - published
   pull_request:
-    branches-ignore:
-      - 'ght/**'
+    paths-ignore:
+      - '.github/**'
 jobs:
   #
   # Create the Source Distribution
