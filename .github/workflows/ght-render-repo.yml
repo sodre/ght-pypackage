@@ -75,6 +75,8 @@ jobs:
               5. Commit
                  git commit
 
+            Close #${{ github.event.number }}
+
           title: Render ght/master into master
           reviewers: ${{ github.actor }}
           labels: ght
