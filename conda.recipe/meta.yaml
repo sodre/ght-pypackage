@@ -24,7 +24,7 @@ build:
   {%- endraw %}
   {% if cookiecutter.noarch_python == 'y' -%}
   noarch: python
-  {% endif %}
+  {%- endif %}
   {%- raw %}
   {%- if 'entry_points' in data and 'console_scripts' in data['entry_points'] %}
   entry_points:
