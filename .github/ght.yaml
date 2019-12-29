@@ -1,4 +1,14 @@
 ---
+codecov:
+  #
+  # TODO: Place your codecov.io *BADGE* token here for private repositories
+  badge_token: CODECOV_BADGE_TOKEN
+codacy:
+  #
+  # TODO: Place your CODACY Project Id here.
+  #       This is used for displaying your badge in public and private repos
+  project_id: CODACY_BADGE_TOKEN
+
 cookiecutter:
   #
   # TODO: Please pick one, e.g. command_line_interface: Click
@@ -18,9 +28,9 @@ cookiecutter:
   #
   # These were guess based on the repository information
   # You probably want to customize them.
-  project_namespace: "{{ cookiecutter.github_organization }}"
-  project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_') }}"
-  project_name: "{{ cookiecutter.project_namespace }}'s {{ github.repository.name }}"
+  project_namespace: "{{ cookiecutter.github_organization.replace(' ', '_').replace('-', '_') }}"
+  project_slug: "{{ github.repository.name.lower().replace(' ', '_').replace('-', '_').replace(project_namespace+'_', '') }}"
+  project_name: "{{ cookiecutter.project_namespace }}'s {{ cookiecutter.project_slug }}"
 
   #
   # These are likely correct...
