@@ -137,12 +137,11 @@ jobs:
           conda-build-version: 3.18
           condarc-file: .github/condarc.yml
       - run: conda install setuptools_scm conda-verify
-      - run: conda render . > rendered-meta.yaml
       - uses: actions/cache@v1
         id: conda-pkgs-cache
         with:
           path: /usr/share/miniconda/pkgs
-          key: ${{  runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('rendered-meta.yaml') }}
+          key: ${{  runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('setup.py') }}
 
       # TODO: We have to create an Anaconda token file to download private packages
       - name: Run conda build
@@ -189,14 +188,12 @@ jobs:
         with:
           activate-environment: ''
           auto-activate-base: true
-          conda-build-version: 3.18
-          condarc-file: .github/condarc.yml
       - uses: actions/cache@v1
         id: conda-pkgs-cache
         with:
           path: /usr/share/miniconda/pkgs
-          key: ${{  runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('.github/release-publisher.yml') }}
-      - run: conda install anaconda-client
+          key: ${{  runner.os }}-conda-ac1.7.2
+      - run: conda install anaconda-client=1.7.2
 
       - run: cat conda-bld-manifest | xargs conda server upload --private
         if: github.event.repository.private == true

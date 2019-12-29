@@ -94,8 +94,8 @@ render_tree_content()
 
 render_tree_ght_content()
 {
-    find . -path ./.github -prune -o -type f -name '*.ght' |
-        grep -E -v './.github$' |
+    find . -path ./.git -prune -o -type f -name '*.ght' |
+        grep -E -v './.git$' |
         sort |
         while IFS=$'\n' read -r in; do
             out=${in/.ght/}
