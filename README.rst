@@ -6,9 +6,9 @@
 .. image:: https://img.shields.io/conda/v/{{ cookiecutter.anaconda_organization }}/{{ cookiecutter.project_repo }}?logo=anaconda&style=flat-square
    :target: https://anaconda.org/{{ cookiecutter.anaconda_organization }}/{{ cookiecutter.project_repo }}
 
-{% if is_open_source %}
+{%-if is_open_source %}
 .. image:: https://img.shields.io/codecov/c/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}?logo=codecov&style=flat-square
-{% else %}
+{%- else %}
 .. image:: https://codecov.io/gh/{{  cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/branch/master/graph/badge.svg?token={{ codecov.badge_token }}
 {%- endif %}
    :target: https://codecov.io/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}
