@@ -1,6 +1,5 @@
 [run]
 source = {{ cookiecutter.project_namespace }}
-command_line = -m pytest
 
 [report]
 omit =

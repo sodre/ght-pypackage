@@ -39,7 +39,7 @@ jobs:
           key: ${{  matrix.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('setup.py') }}
       - run: python setup.py --version
       - run: pip install . .[test]
-      - run: pytest
+      - run: coverage run -m pytest
       - uses: codecov/codecov-action@v1
         with:
           name: ${{  matrix.os }}-py${{ matrix.python-version }}
