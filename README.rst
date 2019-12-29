@@ -21,7 +21,7 @@
    :target: https://github.com/psf/black
 
 {% if is_open_source %}
-.. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_repo }}.svg&style=flat-square
+.. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_repo }}?logo=pypi&style=flat-square
    :target: https://pypi.python.org/pypi/{{ cookiecutter.project_repo }}
 
 .. image:: https://readthedocs.org/projects/{{ cookiecutter.project_repo | replace("_", "-") }}/badge/?version=latest&style=flat-square
