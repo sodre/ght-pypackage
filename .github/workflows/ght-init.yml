@@ -73,20 +73,20 @@ jobs:
             with the rendered template.
 
             Here is a list of things that  I can't automatte yet:
-              - [ ] [Protect][2] your the branches:
+              -  [Protect][2] your the branches:
                 - [ ] The `master` branch
                 - [ ] The `ght/master` branch
-              - [ ] Configure codecov.io:
+              -  Configure codecov.io:
                 - [ ] Add [CODECOV_TOKEN][codecov] to [GitHub Secrets][secrets]
                 - [ ] (private repo) Add [CODECOV_BADGE_TOKEN][codecov-badge] to [ght.yaml][1]
-              - [ ] Configure codacy.com:
+              -  Configure codacy.com:
                 - [ ] Add your [Codacy badge id][codacy-badge] a.k.a. `project-id` to [ght.yaml][1]
                 - [ ] (optional) Add your [CODACY_API_TOKEN][codacy-coverage] to [GitHub Secrets][secrets] for code coverage
-              - [ ] Configure anaconda.org
+              -  Configure anaconda.org
                 - [ ] Add a [ANACONDA_API_TOKEN][anaconda] to [GitHub Secrets][secrets].
                       The token must have `api:read, api:write, conda` scope. We suggest calling it `zeroae-cli-rw`.
               - [ ] (public repos) Configure PyPi.org
-              - [ ] Add your [PYPI_API_TOKEN][pypi] to [GitHub Secrets][secrets]
+                - [ ] Add your [PYPI_API_TOKEN][pypi] to [GitHub Secrets][secrets]
 
             [1]: https://github.com/${{ github.repository }}/edit/ght/configure/.github/ght.yaml
             [2]: https://github.com/${{ github.repository }}/settings/branch_protection_rules/new
