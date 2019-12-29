@@ -9,11 +9,11 @@
 {% if is_open_source %}
 .. image:: https://img.shields.io/codecov/c/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}?logo=codecov&style=flat-square
 {% else %}
-.. image:: https://codecov.io/gh/{{  cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/branch/master/graph/badge.svg?token=CODECOV_BADGE_TOKEN
+.. image:: https://codecov.io/gh/{{  cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/branch/master/graph/badge.svg?token={{ codecov.badge_token }}
 {%- endif %}
    :target: https://codecov.io/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}
 
-.. image:: https://img.shields.io/codacy/grade/CODACY_BADGE_TOKEN?logo=codacy&style=flat-square
+.. image:: https://img.shields.io/codacy/grade/{{ codacy.project_id }}?logo=codacy&style=flat-square
    :target: https://www.codacy.com/app/{{ cookiecutter.github_organization }}/{{  cookiecutter.project_repo }}
    :alt: Codacy Badge
 
