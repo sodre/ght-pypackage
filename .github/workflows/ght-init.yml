@@ -73,27 +73,30 @@ jobs:
             with the rendered template.
 
             Here is a list of things that  I can't automatte yet:
-              - [ ] [Protect][2] your `master` branch.
+              - [ ] [Protect][2] your the branches:
+                - [ ] The `master` branch
+                - [ ] The `ght/master` branch
               - [ ] Configure codecov.io:
-                  - [ ] Add [CODECOV_TOKEN][codedov] to [GitHub Secrets][secrets]
-                  - [ ] (private repo) Add [CODECOV_BADGE_TOKEN][codecov] to [ght.yaml][1]
+                - [ ] Add [CODECOV_TOKEN][codecov] to [GitHub Secrets][secrets]
+                - [ ] (private repo) Add [CODECOV_BADGE_TOKEN][codecov-badge] to [ght.yaml][1]
               - [ ] Configure codacy.com:
-                  - [ ] Add your [CODACY_API_TOKEN][codacy] to [GitHub Secrets][secrets]
-                  - [ ] (private repo) Add your [CODACY_BADGE_TOKEN][codacy] to [ght.yaml][1]
+                - [ ] Add your [Codacy badge id][codacy-badge] a.k.a. `project-id` to [ght.yaml][1]
+                - [ ] (optional) Add your [CODACY_API_TOKEN][codacy-coverage] to [GitHub Secrets][secrets] for code coverage
               - [ ] Configure anaconda.org
-                  - [ ] Create an upload token with `api:read, api:write, conda` scopes
-                      ```
-                        anaconda auth -c -n ${{ github.repository }}-rw -o ${{ github.repository }} -s "api:read api:write conda"
-                      ```
-                  - [ ] Add the ANACONDA_API_TOKEN from above to [GitHub Secrets][secrets]
+                - [ ] Add a [ANACONDA_API_TOKEN][anaconda] to [GitHub Secrets][secrets].
+                      The token must have `api:read, api:write, conda` scope. We suggest calling it `zeroae-cli-rw`.
               - [ ] (public repos) Configure PyPi.org
-                  - [ ] Add your [PYPI_API_TOKEN][pypi] to [GitHub Secrets][secrets]
+              - [ ] Add your [PYPI_API_TOKEN][pypi] to [GitHub Secrets][secrets]
 
-            [1]: https://github.com/${{github.repository}}/edit/ght/configure/.github/ght.yaml
-            [2]: https://github.com/${{github.repository}}/settings/branch_protection_rules/new
-            [codecov]: https://codecov.io/gh/${github.repository}/settings
-            [codacy]: https://app.codacy.com/manual/${{github.repository}}/settings
-            [secrets]: https://github.com/${{github.repository}}/settings/secrets/new
+            [1]: https://github.com/${{ github.repostiroy }}/edit/ght/configure/.github/ght.yaml
+            [2]: https://github.com/${{ github.repository }}/settings/branch_protection_rules/new
+            [codecov]: https://codecov.io/gh/${{ github.repository }}/settings
+            [codecov-badge]: https://codecov.io/gh/${{ github.repository }}/settings/badge
+            [codacy-badge]: https://app.codacy.com/gh/${{ github.repository }}/settings
+            [codacy-coverage]: https://app.codacy.com/gh/${{ github.repository }}/settings/coverage
+            [secrets]: https://github.com/${{ github.repository }}/settings/secrets
+            [pypi]: https://pypi.org/manage/account/token/
+            [anaconda]: https://anaconda.org/${{ github.event.repository.owner.name }}/settings/access
 
       - name: Remind owner to replace their PyPi
         uses: maxkomarychev/oction-create-issue@v0.7.1
