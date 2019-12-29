@@ -28,6 +28,7 @@ help:
 
 init: ## Initializes the development environment
 	conda env create --force .
+	pre-commit install
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 

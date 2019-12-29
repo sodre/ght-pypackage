@@ -26,6 +26,7 @@ dependencies:
   - watchdog
 
   # Dev Workflow requirements
+  - pre-commit
   - black
   - flake8
   - twine
