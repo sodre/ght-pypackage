@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add ght-pypackage remote
         run: |
@@ -19,7 +21,7 @@ jobs:
         run: |
           git rm -rf .
           git checkout remotes/ght-pypackage/f-remote-template -- .
-          git checkout origin/${{ github.head_ref }} -- .github/ght.yaml
+          git checkout ${{ github.sha }} -- .github/ght.yaml
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
@@ -34,6 +36,9 @@ jobs:
           .github/bin/ght-render.sh render-tree-ght-content
           .github/bin/ght-render.sh render-tree-content
           #.github/bin/ght-render.sh remove-workflows
+      - run: |
+          git commit -m 'auto-commit'
+          git push ${{ github.head_ref }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
