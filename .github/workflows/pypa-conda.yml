@@ -1,0 +1,347 @@
+#
+# This GitHub Workflow was installed from https://github.com/sodre/workflows
+# Please see the original repo on instructions on how to keep this up-to-date
+name: pypa-conda
+on:
+  release:
+    types: [published]
+  pull_request:
+jobs:
+  #
+  # Create the PyPA source distribution
+  #   - It must be architecture independent.
+  #   - It must adhere to black code-formatting rules.
+  #   - It must pass flake8 source code analysis.
+  create-sdist:
+    name: pypa-sdist
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.6]
+        black-version: [19.10b]
+        flake8-version: [3.7.9]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ matrix.os }}-py${{ matrix.python-version }}-pip-black${{matrix.black-version}}-flake8${{matrix.flake8-version }}
+      - name: Install Black and Flake8
+        run: pip install black flake8
+      - name: Enforce black formatting
+        run: black --check .
+      - name: Enforce Flake8
+        run: flake8
+      - name: Build source distribution
+        run: python setup.py sdist
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: pypa-sdist
+          path: dist
+
+  #
+  # Create the PyPA binary distribution wheel
+  #   - It must start from the source distribution
+  #   - It can be architecture dependent, or universal (assumed in this case)
+  create-bdist-wheel:
+    name: pypa-bdist-wheel
+    needs:
+      - create-sdist
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.7]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download the source distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-sdist
+          path: .
+      # TODO: This piece can be improved, e.g. ensuring we are deleting the correct file
+      - name: Unpack the source distribution
+        run: |
+          tar -xvf *.tar.gz --strip 1
+          rm -f *.tar.gz
+
+      # Create the bdist wheel file
+      - uses: actions/setup-python@v1.1.1
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: .eggs
+          key: ${{  matrix.os }}-${{ matrix.python-version }}-eggs-${{ hashFiles('setup.py') }}
+      - run: python setup.py bdist_wheel
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: pypa-bdist-wheel
+          path: dist
+
+  #
+  # Create the test distribution
+  #   - It must start from the source distribution
+  #   - It is architecture independent
+  create-tdist:
+    name: custom-tdist
+    needs:
+      - create-sdist
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.7]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download the source distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-sdist
+          path: .
+      # TODO: This piece can be improved, e.g. ensuring we are deleting the correct file
+      - name: Unpack the source distribution
+        run: |
+          tar -xvf *.tar.gz --strip 1
+          rm -f *.tar.gz
+
+      # Create the test distribution
+      - name: Create test distribution
+        run: |
+          mkdir dist
+          mv .coveragerc .github/codecov.yml setup.cfg setup.py tests dist
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: custom-tdist
+          path: dist
+
+
+  #
+  # Ensure pypa distribution passes unit tests
+  #   - These must run on every pull-request commit
+  #   - They should run on as many architectures as we expect to support
+  serverless-tox:
+    name: pypa-detox
+    needs:
+      - create-tdist
+      - create-bdist-wheel
+    if: github.event_name == 'pull_request'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        python-version: [3.8]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download the binary distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-bdist-wheel
+          path: dist
+      - name: Download the test distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: custom-tdist
+          path: .
+
+      #
+      # Setup the test environment, python + .whl + .whl[test]
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Get pip cache
+        id: pip-cache
+        run: |
+          python -c "from pip._internal.locations import USER_CACHE_DIR; print('::set-output name=dir::' + USER_CACHE_DIR)"
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ matrix.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('setup.py') }}
+      - name: Install binary and test dependencies
+        shell: bash
+        run: |
+          find dist -type f -name '*.whl' -exec pip install {} +
+          find dist -type f -name '*.whl' -exec pip install {}[test] \;
+          rm -rf dist
+
+      #
+      # Runs the test with coverage
+      - name: Run pytest through coverage
+        run: coverage run -m pytest
+      - name: Create coverage.xml artifact
+        run: coverage xml
+      # TODO: export junit.xml and coverage.xml as artifacts
+      - uses: codecov/codecov-action@v1
+        with:
+          name: ${{  matrix.os }}-py${{ matrix.python-version }}
+          fail_ci_if_error: true
+          file: ./coverage.xml
+          yml: .github/codecov.yml
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  #
+  # Create Conda Distribution
+  #   - Must start from source distribution
+  #   - Outputs the non-indexed contents of conda-bld folder
+  create-conda-package:
+    name: conda-build
+    needs:
+      - create-sdist
+    strategy:
+      matrix:
+        arch: [noarch]
+        python-version: [3.7]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Source Distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-sdist
+          path: .
+      # TODO: This piece can be improved, e.g. ensuring we are deleting the same file
+      - name: Unpack Source Distribution
+        run: |
+          tar -xvf *.tar.gz --strip 1
+          rm *.tar.gz
+
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          activate-environment: ''
+          auto-activate-base: true
+          conda-build-version: 3.18
+          condarc-file: .github/condarc.yml
+      - run: conda install setuptools_scm conda-verify
+      - uses: actions/cache@v1
+        id: conda-pkgs-cache
+        with:
+          path: /usr/share/miniconda/pkgs
+          key: ${{ runner.os }}-conda-py${{ matrix.python-version }}-${{ hashFiles('setup.py') }}
+
+      # TODO: We have to create an Anaconda token file to download private packages
+      - name: Run conda build
+        run: |
+          mkdir conda-bld
+          conda build --output-folder conda-bld .
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+      - name: Create conda-bld/manifest
+        run: |
+          for subdir in $(jq -r .subdirs[] conda-bld/channeldata.json); do
+            for pkg in $(jq -r '.packages | to_entries[] | .key' conda-bld/$subdir/repodata.json); do
+              echo conda-bld/$subdir/$pkg
+            done
+          done > conda-bld/manifest
+      - name: Make conda-bld artifact
+        run: |
+          mkdir dist
+          echo conda-bld/manifest | cat - conda-bld/manifest | zip -@ dist/conda-bld-${{ matrix.arch }}.zip
+
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: conda-bld-${{ matrix.arch }}
+          path: dist
+
+
+  #
+  # Publish the PyPA distributions to Release
+  upload-to-github:
+    name: upload-to-github
+    if: github.event_name == 'release'
+    needs:
+      - create-sdist
+      - create-bdist-wheel
+      - create-conda-package
+    strategy:
+      matrix:
+        artifact-name:
+          - pypa-sdist
+          - pypa-bdist-wheel
+          - conda-bld-noarch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: dist
+      #
+      # Publish Release Asset (to GitHub)
+      - name: Upload assets to this release
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: dist/*
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  #
+  # Publish to PyPi if public repository
+  upload-to-pypi:
+    name: upload-to-pypi
+    if: github.event.repository.private == false && github.event_name == 'release'
+    runs-on: ubuntu-latest
+    needs:
+      - upload-to-github
+    steps:
+      - name: Download source distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-sdist
+          path: dist
+
+      - name: Download binary distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: pypa-bdist-wheel
+          path: dist
+
+      - uses: actions/setup-python@v1.1.1
+      - name: Upload release to pypi.org
+        if: github.event.repository.private == false
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          pip install twine
+          twine upload dist/*
+
+  #
+  # Publish to Anaconda Cloud
+  upload-to-anaconda:
+    name: upload-to-anaconda
+    if: github.event_name == 'release'
+    needs:
+      - upload-to-github
+    strategy:
+      matrix:
+        artifact-name:
+          - conda-bld-noarch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download ${{ matrix.artifact-name }} distribution
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: .
+      - name: Unpack ${{ matrix.artifact-name }}
+        run: unzip ${{ matrix.artifact-name }}.zip
+
+      # Publish to Anaconda Cloud / Public and Private repos
+      - uses: actions/cache@v1
+        id: conda-pkgs-cache
+        with:
+          path: /usr/share/miniconda/pkgs
+          key: ${{ runner.os }}-conda-ac1.7.2
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          activate-environment: ''
+          auto-activate-base: true
+      - run: conda install anaconda-client=1.7.2
+
+      - name: Upload to Anaconda Cloud
+        run: |
+          cat conda-bld/manifest \
+          | xargs conda server upload `if ${{ github.event.repository.private }}; then echo --private; fi`
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}

@@ -3,10 +3,13 @@
 {{ cookiecutter.project_name }}
 {% for _ in cookiecutter.project_name %}={% endfor %}
 
+.. image:: https://img.shields.io/github/workflow/status/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/pypa-conda?label=pypa-conda&logo=github&style=flat-square
+   :target: https://github.com/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/actions?query=workflow%3Apypa-conda
+
 .. image:: https://img.shields.io/conda/v/{{ cookiecutter.anaconda_organization }}/{{ cookiecutter.project_repo }}?logo=anaconda&style=flat-square
    :target: https://anaconda.org/{{ cookiecutter.anaconda_organization }}/{{ cookiecutter.project_repo }}
 
-{%-if is_open_source %}
+{% if is_open_source %}
 .. image:: https://img.shields.io/codecov/c/gh/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}?logo=codecov&style=flat-square
 {%- else %}
 .. image:: https://codecov.io/gh/{{  cookiecutter.github_organization }}/{{ cookiecutter.project_repo }}/branch/master/graph/badge.svg?token={{ codecov.badge_token }}
