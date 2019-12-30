@@ -101,7 +101,7 @@ render_tree_ght_content()
             out=${in/.ght/}
             echo "rendering ${in}"
             render $in $out
-            git rm ${in}
+            git rm -f ${in}
             git add ${out}
         done
     #git commit -m 'ght: *.j2 content rendered and renamed'
