@@ -37,10 +37,10 @@ jobs:
           .github/bin/ght-render.sh render-tree-content
           #.github/bin/ght-render.sh remove-workflows
       - run: |
-          git config --global user.email "${{ github.event.head_commit.author.email }}"
-          git config --global user.name "${{ github.event.head_commit.author.name }}"
+          git config --global user.email "no-reply@user.github.com"
+          git config --global user.name "Auto-commit"
           git commit -m 'auto-commit'
-          git push ${{ github.head_ref }}
+          git push --set-upstream origin HEAD:${{ github.head_ref }} --force
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
