@@ -10,30 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get last Merge Commit of the ght/render branch to Master
-        id: last-render
+      - name: Add ght-pypackage remote
         run: |
-          last_render=$(git log --merges -1 --grep 'ght/render' --pretty=format:'%H')
-          if [ -z $last_render ]; then
-            last_render=master
-          fi
-          echo "::set-output name=treeish::${last_render}"
-
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.last-render.outputs.treeish }}
-
-      - name: Fetch all branches
-        run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          git remote add ght-pypackage https://github.com/sodre/ght-pypackage.git
+          git fetch ght-pypackage
 
       - name: Prepare tree for re-rendering
         run: |
           git rm -rf .
-          git checkout origin/ght/master -- .
-          git checkout origin/${{ github.head_ref }} -- .github/ght.yaml
+          git checkout remotes/ght-pypackage/master -- .
+          git checkout ${{ github.head_ref }} -- .github/ght.yaml
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
@@ -47,10 +36,24 @@ jobs:
           .github/bin/ght-render.sh render-tree-structure
           .github/bin/ght-render.sh render-tree-ght-content
           .github/bin/ght-render.sh render-tree-content
-          .github/bin/ght-render.sh remove-workflows
+          #.github/bin/ght-render.sh remove-workflows
+
+      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+        with:
+          commit_message: Apply automatic changes
+          branch: ${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#     - run: |
+#         git config --global user.email "no-reply@user.github.com"
+#         git config --global user.name "Auto-commit"
+#         git commit -m 'auto-commit'
+#         git push --set-upstream origin HEAD:${{ github.head_ref }} --force
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v1
+        if: false
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: master
