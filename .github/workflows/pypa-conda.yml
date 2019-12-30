@@ -6,6 +6,8 @@ on:
   release:
     types: [published]
   pull_request:
+    branches-ignore:
+      - "ght/**"
 jobs:
   #
   # Create the PyPA source distribution
