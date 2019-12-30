@@ -21,7 +21,7 @@ jobs:
       - name: Prepare tree for re-rendering
         run: |
           git rm -rf .
-          git checkout remotes/ght-pypackage/f-remote-template -- .
+          git checkout remotes/ght-pypackage/master -- .
           git checkout ${{ github.head_ref }} -- .github/ght.yaml
 
       - name: Set up Python 3.7
