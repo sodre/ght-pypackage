@@ -1,5 +1,5 @@
 {%- import '.github/ght/macros/selected.j2' as selected -%}
-{%- call(license) selected.first(cookiecutter.open_source_license) -%}
+{%- call(license) selected.first(ght.license) -%}
 {%- if license == 'MIT' -%}
 MIT License
 
