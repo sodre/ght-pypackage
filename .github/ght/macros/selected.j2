@@ -1,0 +1,8 @@
+{%- macro first(items) -%}
+  {%- for item in items -%}
+    {%- if item.startswith('(*)') -%}
+      {{ caller(item.replace('(*)', '') | trim) }}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endmacro -%}
