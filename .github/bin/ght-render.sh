@@ -9,16 +9,16 @@ render()
     out=$2
     ght_conf=${3:-$GHT_CONF}
 
-    if [ ! -d $(basename $in)/.github ]; then
-        ln -s $(basename $GHT_CONF) $(basename $in)/.github
+    if [ ! -d $(dirname $in)/.github ]; then
+        ln -s $(dirname $GHT_CONF) $(dirname $in)/.github
     fi
     jinja2 \
         --format yaml\
         -e jinja2_time.TimeExtension \
         -o $out \
         $in $ght_conf
-    if [ -L $(basename $in)/.github ]; then
-        rm $(basename $in)/.github
+    if [ -L $(dirname $in)/.github ]; then
+        rm $(dirname $in)/.github
     fi
 }
 
