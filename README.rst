@@ -1,4 +1,6 @@
-{% set is_open_source = cookiecutter.open_source_license != 'Proprietary' -%}
+{%- import '.github/ght/macros/selected.j2' as selected -%}
+{% call(license) selected.first(cookiecutter.open_source_license) %}
+{% set is_open_source = license != 'Proprietary' -%}
 {% for _ in cookiecutter.project_name %}={% endfor %}
 {{ cookiecutter.project_name }}
 {% for _ in cookiecutter.project_name %}={% endfor %}
@@ -42,7 +44,7 @@
 {{ cookiecutter.project_short_description }}
 
 {% if is_open_source %}
-* Free software: {{ cookiecutter.open_source_license }}
+* Free software: {{ license }}
 * Documentation: https://{{ cookiecutter.project_repo | replace("_", "-") }}.readthedocs.io.
 {% endif %}
 
@@ -58,3 +60,4 @@ This package was created with ght-render_ and the `sodre/ght-pypackage`_ project
 
 .. _ght-render: https://github.com/sodre/action-ght-render
 .. _`sodre/ght-pypackage`: https://github.com/sodre/ght-pypackage
+{% endcall %}
