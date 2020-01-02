@@ -10,14 +10,20 @@ codacy:
   #       This is used for displaying your badge in public and private repos
   project_id: CODACY_BADGE_TOKEN
 
-cookiecutter:
-  #
-  # TODO: Please pick one, e.g. command_line_interface: Click
+ght:
   command_line_interface:
-    - Click
-    - None
-  #
-  # TODO: Please pick one, e.g. (*) MIT
+    - (*) Click
+    - ( ) None
+
+  license:
+    - (*) MIT
+    - ( ) BSD
+    - ( ) ISC
+    - ( ) Apache
+    - ( ) GNUv3
+    - ( ) Proprietary
+
+cookiecutter:
   open_source_license:
     - (*) MIT
     - ( ) BSD

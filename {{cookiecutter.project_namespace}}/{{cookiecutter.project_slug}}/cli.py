@@ -1,7 +1,9 @@
+{%- import '.github/ght/macros/selected.j2' as selected -%}
+{% call(cli) selected.first(ght.command_line_interface) -%}
 """Console script for {{cookiecutter.project_repo}}."""
 
 import sys
-{%- if cookiecutter.command_line_interface|lower == 'click' %}
+{%- if cli|lower == 'click' %}
 import click
 {%- endif %}
 {%- if cookiecutter.project_slug == 'cli' %}
@@ -14,7 +16,7 @@ from entrypoints import get_group_named
 def {{ cookiecutter.project_slug }}(args=None):
     """{{cookiecutter.project_namespace}} command-line-interface"""
     return 0
-{%- elif cookiecutter.command_line_interface|lower == 'click' %}
+{%- elif cli|lower == 'click' %}
 
 
 @click.command()
@@ -31,3 +33,4 @@ def {{ cookiecutter.project_slug }}(args=None):
 
 if __name__ == "__main__":
     sys.exit({{ cookiecutter.project_slug }})  # pragma: no cover
+{%- endcall %}
