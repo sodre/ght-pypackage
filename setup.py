@@ -12,11 +12,13 @@ with open("README.rst") as readme_file:
 # The requirements section should be kept in sync with the environment.yml file
 requirements = [
     # fmt: off
-    {%- if cookiecutter.command_line_interface|lower == 'click' %}
+    {%- call(cli) selected.first(ght.command_line_interface) %}
+    {%- if cli|lower == 'click' %}
     "click>=7.0",
     "click-plugins",
     "entrypoints",
     {%- endif %}
+    {%- endcall %}
     # fmt: on
 ]
 
@@ -72,7 +74,8 @@ setup_kwargs = dict(
         "Programming Language :: Python :: 3.8",
     ],
     description="{{ cookiecutter.project_short_description }}",
-    {%- if 'no' not in cookiecutter.command_line_interface|lower %}
+    {%- call(cli) selected.first(ght.command_line_interface) %}
+    {%- if 'no' not in cli|lower %}
     # fmt: off
     entry_points={
         {%- if cookiecutter.project_slug == "cli" %}
@@ -86,6 +89,7 @@ setup_kwargs = dict(
     },
     # fmt: on
     {%- endif %}
+    {%- endcall %}
     install_requires=requirements,
 {%- call(license) selected.first(cookiecutter.open_source_license) %}
     license="{{ license }}",
