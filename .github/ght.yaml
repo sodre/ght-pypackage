@@ -24,14 +24,6 @@ ght:
     - ( ) Proprietary
 
 cookiecutter:
-  open_source_license:
-    - (*) MIT
-    - ( ) BSD
-    - ( ) ISC
-    - ( ) Apache
-    - ( ) GNUv3
-    - ( ) Proprietary
-
   #
   # These were guess based on the repository information
   # You probably want to customize them.

@@ -64,7 +64,7 @@ setup_kwargs = dict(
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
-{%- call(license) selected.first(cookiecutter.open_source_license) %}
+{%- call(license) selected.first(ght.license) %}
         "{{ license_classifiers[license] }}",
 {%- endcall %}
         "Natural Language :: English",
@@ -91,7 +91,7 @@ setup_kwargs = dict(
     {%- endif %}
     {%- endcall %}
     install_requires=requirements,
-{%- call(license) selected.first(cookiecutter.open_source_license) %}
+{%- call(license) selected.first(ght.license) %}
     license="{{ license }}",
 {%- endcall %}
     long_description=readme,
