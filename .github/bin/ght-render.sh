@@ -9,16 +9,19 @@ render()
     out=$2
     ght_conf=${3:-$GHT_CONF}
 
+    created=false
     if [ ! -d $(dirname $in)/.github ]; then
-        ln -s $(dirname $GHT_CONF) $(dirname $in)/.github
+        mkdir -p $(dirname $in)/.github/
+        cp -avf $(dirname $GHT_CONF)/ght $(dirname $in)/.github
+        created=true
     fi
     jinja2 \
         --format yaml\
         -e jinja2_time.TimeExtension \
         -o $out \
         $in $ght_conf
-    if [ -L $(dirname $in)/.github ]; then
-        rm $(dirname $in)/.github
+    if $created; then
+        rm -rf $(dirname $in)/.github
     fi
 }
 
