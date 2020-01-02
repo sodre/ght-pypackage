@@ -1,5 +1,5 @@
 {%- import '.github/ght/macros/selected.j2' as selected -%}
-{% call(license) selected.first(cookiecutter.open_source_license) %}
+{% call(license) selected.first(cookiecutter.open_source_license) -%}
 {% set is_open_source = license != 'Proprietary' -%}
 {% for _ in cookiecutter.project_name %}={% endfor %}
 {{ cookiecutter.project_name }}
