@@ -12,7 +12,7 @@ render()
     created=false
     if [ ! -d $(dirname $in)/.github ]; then
         mkdir -p $(dirname $in)/.github/
-        cp -avf $(dirname $GHT_CONF)/ght $(dirname $in)/.github
+        cp -af $(dirname $GHT_CONF)/ght $(dirname $in)/.github
         created=true
     fi
     jinja2 \
