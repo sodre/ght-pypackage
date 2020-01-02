@@ -1,3 +1,4 @@
+{%- import '.github/ght/macros/selected.j2' as selected -%}
 #!/usr/bin/env python
 
 """The setup script."""
@@ -61,9 +62,9 @@ setup_kwargs = dict(
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
-{%- if cookiecutter.open_source_license in license_classifiers %}
-        "{{ license_classifiers[cookiecutter.open_source_license] }}",
-{%- endif %}
+{%- call(license) selected.first(cookiecutter.open_source_license) %}
+        "{{ license_classifiers[license] }}",
+{%- endcall %}
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
@@ -86,9 +87,9 @@ setup_kwargs = dict(
     # fmt: on
     {%- endif %}
     install_requires=requirements,
-{%- if cookiecutter.open_source_license in license_classifiers %}
-    license="{{ cookiecutter.open_source_license }}",
-{%- endif %}
+{%- call(license) selected.first(cookiecutter.open_source_license) %}
+    license="{{ license }}",
+{%- endcall %}
     long_description=readme,
     long_description_content_type="text/x-rst",
     include_package_data=True,
