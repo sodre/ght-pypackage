@@ -15,6 +15,8 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Here is what is available
+        run: jq . $GITHUB_EVENT_PATH
       - uses: sodre/ght-render@master
         with:
           template: sodre/ght-pypackage@f-external-ght
