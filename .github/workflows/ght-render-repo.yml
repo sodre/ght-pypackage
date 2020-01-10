@@ -21,7 +21,7 @@ jobs:
         with:
           template: sodre/ght-pypackage@f-external-ght
       - name: Push changes to ght/master
-        run: git push --set-upstream origin HEAD:${{ github.ref }}
+        run: git push --set-upstream origin HEAD:${{ github.head_ref }}
 
       - name: Create pull-request against master
         uses: octokit/request-action@v2.x
