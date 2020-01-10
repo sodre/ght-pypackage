@@ -25,7 +25,7 @@ jobs:
         run: git push --set-upstream origin HEAD:${{ github.ref }}
       - name: Push changes to
         if: github.event_name ==  'pull_request'
-        run: git push --set-upstream origin HEAD:${{ github.head_ref}}
+        run: git push --set-upstream origin ${{ github.head_ref}}
 
       - name: Create pull-request against master
         uses: octokit/request-action@v2.x
