@@ -15,15 +15,16 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Here is what is available
-        run: jq . $GITHUB_EVENT_PATH
-      - uses: sodre/ght-render@master
+
+      - name: Render the project template
+        uses: sodre/ght-render@master
         with:
-          template: sodre/ght-pypackage@f-external-ght
+          template: sodre/ght-pypackage@master
+
       - name: Push changes to ght/master
         if: github.event_name ==  'push'
         run: git push --set-upstream origin HEAD:${{ github.ref }}
-      - name: Push changes to
+      - name: Push changes to head_ref
         if: github.event_name ==  'pull_request'
         run: git push --set-upstream origin ${{ github.head_ref}}
 
