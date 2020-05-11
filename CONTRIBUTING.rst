@@ -69,7 +69,6 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_repo }}` for 
     $ cd {{ cookiecutter.project_repo }}/
     $ make init
     $ conda activate {{ cookiecutter.project_repo }}-dev
-    $ pip install -e . --no-deps
 
 4. Create a branch for local development, use the ``f-``, ``i-`` or ``chore-`` prefixes to auto-label your PR::
 

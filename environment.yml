@@ -6,6 +6,8 @@ channels:
 dependencies:
   - python
   - pip
+  - pip:
+    - -e .
 
   # Setup Requirements (setup.py:setup_requirements)
   - pytest-runner >=5
