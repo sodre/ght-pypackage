@@ -59,7 +59,7 @@ conda_rosetta_stone = {
 setup_kwargs = dict(
     author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
     author_email="{{ cookiecutter.email }}",
-    use_scm_version={"write_to": "{{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/_version.py"},
+    use_scm_version={"write_to": "src/{{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/_version.py"},
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -99,7 +99,8 @@ setup_kwargs = dict(
     include_package_data=True,
     keywords="{{ cookiecutter.project_slug }} {{ cookiecutter.project_namespace }}",
     name="{{cookiecutter.project_namespace}}-{{ cookiecutter.project_slug }}",
-    packages=find_namespace_packages(include=["{{ cookiecutter.project_namespace }}.*"]),
+    package_dir={"": "src"},
+    packages=find_namespace_packages(where="./src"),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,

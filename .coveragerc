@@ -1,9 +1,15 @@
 [run]
-source = {{ cookiecutter.project_namespace }}
+source =
+  {{ cookiecutter.project_namespace }}
+
+[paths]
+source =
+  src
+  **/site-packages/pixl
 
 [report]
 omit =
     setup.py
-    {{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/__main__.py
-    {{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/_version.py
+    src/{{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/__main__.py
+    src/{{ cookiecutter.project_namespace }}/{{ cookiecutter.project_slug }}/_version.py
     tests/*
