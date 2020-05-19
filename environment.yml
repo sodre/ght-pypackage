@@ -1,4 +1,5 @@
 {%- import '.github/ght/macros/selected.j2' as selected -%}
+{%- call(cli) selected.first(ght.command_line_interface) %}
 name: {{ cookiecutter.project_repo }}-dev
 channels:
   - {{ cookiecutter.anaconda_organization }}
@@ -26,11 +27,9 @@ dependencies:
 
   # Documentation Requirements (setup.py:doc_requirements)
   - sphinx
-{% call(cli) selected.first(ght.command_line_interface) -%}
 {%- if cli|lower == 'click' %}
-    - sphinx-click
+  - sphinx-click
 {%- endif %}
-{%- endcall %}
   - watchdog
 
   # Dev Workflow requirements
@@ -38,4 +37,4 @@ dependencies:
   - black
   - flake8
   - twine
-
+{%- endcall %}
