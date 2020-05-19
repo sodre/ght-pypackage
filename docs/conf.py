@@ -1,3 +1,4 @@
+{%- import '.github/ght/macros/selected.j2' as selected -%}
 #!/usr/bin/env python
 #
 # {{ cookiecutter.project_repo }} documentation build configuration file, created by
