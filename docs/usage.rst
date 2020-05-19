@@ -18,6 +18,6 @@ Library Usage
 -------------
 To use {{ cookiecutter.project_name }} in a project::
 
-    import {{ cookiecutter.project_slug }}
+    import {{ cookiecutter.project_namespace }}.{{ cookiecutter.project_slug }}
 
 {%- endcall %}
