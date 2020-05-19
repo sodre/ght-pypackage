@@ -27,8 +27,8 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 init: ## Initializes the development environment
-	conda env create --force .
-	pre-commit install
+	conda env update . || conda env create .
+	conda run -n {{ cookiecutter.project_repo }}-dev
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
