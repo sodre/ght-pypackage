@@ -121,7 +121,7 @@ setup_kwargs = dict(
     tests_require=test_requirements,
     extras_require={
         # fmt: off
-        "test": test_requirements
+        "test": test_requirements,
         "doc": doc_requirements
         # fmt: on
     },
