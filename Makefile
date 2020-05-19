@@ -28,7 +28,7 @@ help:
 
 init: ## Initializes the development environment
 	conda env update . || conda env create .
-	conda run -n {{ cookiecutter.project_repo }}-dev
+	conda run -n {{ cookiecutter.project_repo }}-dev pre-commit install
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
