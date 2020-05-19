@@ -40,7 +40,7 @@ extensions = [
     "sphinx_click.ext",
 {%- endif %}
 {%- endcall %}
-    "sphinx.ext.viewcode"
+    "sphinx.ext.viewcode",
 # fmt: on
 ]
 
