@@ -1,11 +1,12 @@
 [run]
+branch = true
 source =
-  {{ cookiecutter.project_namespace }}
+    {{ cookiecutter.project_namespace }}
 
 [paths]
 source =
-  src
-  **/site-packages/pixl
+    src
+    **/site-packages
 
 [report]
 omit =
