@@ -15,4 +15,4 @@ To use {{ cookiecutter.project_name }} command line tool:
   :prog: {{ cookiecutter.project_namespace }}{% if cookiecutter.project_slug != "cli" %}{{ cookiecutter.project_slug.replace("_", "-") }}{% endif %}
   :show-nested:
 {%- endif %}
-{% -endcall %}
+{%- endcall %}
