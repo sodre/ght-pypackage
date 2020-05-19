@@ -48,7 +48,7 @@ doc_requirements = [
     "sphinx-autoapi",
     {%- call(cli) selected.first(ght.command_line_interface) %}
     {%- if cli|lower == 'click' %}
-     "sphinx-click",
+    "sphinx-click",
     {%- endif %}
     {%- endcall %}
     "watchdog",
