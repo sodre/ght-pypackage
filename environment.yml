@@ -23,8 +23,9 @@ dependencies:
   - pytest >=3
   - pytest-cov
 
-  # Documentation Requirements
+  # Documentation Requirements (setup.py:doc_requirements)
   - sphinx
+  - sphinx-click
   - watchdog
 
   # Dev Workflow requirements
