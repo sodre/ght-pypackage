@@ -4,6 +4,7 @@
 Usage
 =====
 
+{%- if cli|lower == 'click' %}
 Command line interface
 ----------------------
 To use {{ cookiecutter.project_name }} command line tool:
@@ -13,12 +14,10 @@ To use {{ cookiecutter.project_name }} command line tool:
   :show-nested:
 {%- endif %}
 
-
 Library Usage
 -------------
 To use {{ cookiecutter.project_name }} in a project::
 
     import {{ cookiecutter.project_slug }}
 
-{%- if cli|lower == 'click' %}
 {%- endcall %}
