@@ -48,7 +48,7 @@ clean-pyc: ## remove Python file artifacts
 
 clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
-	rm -f .coverage
+	rm -f .coverage .coverage.*
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
@@ -68,9 +68,9 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/{{ cookiecutter.project_slug }}.rst
+	rm -f docs/{{ cookiecutter.project_namespace }}.*.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ {{ cookiecutter.project_namespace }}
+	sphinx-apidoc -o docs/ src/{{ cookiecutter.project_namespace }}
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
