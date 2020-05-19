@@ -27,6 +27,7 @@ setup_requirements = [
     {%- if cookiecutter.use_pytest == 'y' %}
     "pytest-runner",
     "setuptools_scm",
+    "setuptools_scm_git_archive",
     "wheel",
     {%- endif %}
     # fmt: on
