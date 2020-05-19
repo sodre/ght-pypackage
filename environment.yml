@@ -1,3 +1,4 @@
+{%- import '.github/ght/macros/selected.j2' as selected -%}
 name: {{ cookiecutter.project_repo }}-dev
 channels:
   - {{ cookiecutter.anaconda_organization }}
