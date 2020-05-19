@@ -23,8 +23,13 @@ dependencies:
   - pytest >=3
   - pytest-cov
 
-  # Documentation Requirements
+  # Documentation Requirements (setup.py:doc_requirements)
   - sphinx
+{% call(cli) selected.first(ght.command_line_interface) -%}
+{%- if cli|lower == 'click' %}
+    - sphinx-click
+{%- endif %}
+{%- endcall %}
   - watchdog
 
   # Dev Workflow requirements
@@ -32,5 +37,4 @@ dependencies:
   - black
   - flake8
   - twine
-
 

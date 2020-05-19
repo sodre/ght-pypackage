@@ -42,6 +42,20 @@ test_requirements = [
     # fmt: on
 ]
 
+doc_requirements = [
+    # fmt: off
+    "sphinx",
+    "sphinx-autoapi",
+    {%- call(cli) selected.first(ght.command_line_interface) %}
+    {%- if cli|lower == 'click' %}
+     "sphinx-click",
+    {%- endif %}
+    {%- endcall %}
+    "watchdog",
+    # fmt: on
+]
+
+
 conda_rosetta_stone = {
     # fmt: off
     "pypa-requirement": "conda-dependency"
@@ -107,7 +121,8 @@ setup_kwargs = dict(
     tests_require=test_requirements,
     extras_require={
         # fmt: off
-        "test": test_requirements
+        "test": test_requirements,
+        "doc": doc_requirements
         # fmt: on
     },
     url="https://github.com/{{ cookiecutter.github_organization}}/{{ cookiecutter.project_repo}}",
