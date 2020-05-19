@@ -35,7 +35,11 @@ sys.path.insert(0, os.path.abspath(".."))
 extensions = [
 # fmt: off
     "sphinx.ext.autodoc",
+{% call(cli) selected.first(ght.command_line_interface) -%}
+{%- if cli|lower == 'click' %}
     "sphinx_click.ext",
+{%- endif %}
+{%- endcall %}
     "sphinx.ext.viewcode"
 # fmt: on
 ]

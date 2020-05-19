@@ -25,7 +25,11 @@ dependencies:
 
   # Documentation Requirements (setup.py:doc_requirements)
   - sphinx
-  - sphinx-click
+{% call(cli) selected.first(ght.command_line_interface) -%}
+{%- if cli|lower == 'click' %}
+    - sphinx-click
+{%- endif %}
+{%- endcall %}
   - watchdog
 
   # Dev Workflow requirements
@@ -33,5 +37,4 @@ dependencies:
   - black
   - flake8
   - twine
-
 
