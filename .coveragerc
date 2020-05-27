@@ -1,7 +1,7 @@
 [run]
 branch = true
 source =
-    {{ cookiecutter.project_namespace }}
+    {{ cookiecutter.project_namespace }}.{{ cookiecutter.project_slug }}
 
 [paths]
 source =
