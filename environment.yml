@@ -12,7 +12,6 @@ dependencies:
     - -e .
 
   # Setup Requirements (setup.py:setup_requirements)
-  - pytest-runner >=5
   - setuptools_scm
   - setuptools_scm_git_archive
   - wheel
