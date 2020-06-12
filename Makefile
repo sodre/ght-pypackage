@@ -36,6 +36,7 @@ clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr conda-bld/
 	rm -fr dist/
+	rm -fr wheels/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
@@ -85,6 +86,11 @@ dist: clean ## builds source and wheel package
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
+
+.PHONY: wheels
+wheels: dist  ## downloads wheel dependencies
+	pip download -f dist -d wheels {{ cookiecutter.project_namespace }}-{{ cookiecutter.project_slug }}
+	ls -l wheels
 
 dist-conda:  ## builds conda-package
 	conda build --no-anaconda-upload --output-folder conda-bld \
