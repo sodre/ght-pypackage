@@ -28,7 +28,7 @@ cookiecutter:
   # These were guess based on the repository information
   # You probably want to customize them.
   project_namespace: "{{ cookiecutter.github_organization.lower().replace(' ', '_').replace('-', '_') }}"
-  project_slug: "{{ cookiecutter.project_repo.lower().replace(' ', '_').replace('-', '_').replace(cookiecutter.project_namespace+'_', '') }}"
+  project_slug: "{{ cookiecutter.project_repo.lower().replace(' ', '_').replace('-', '_').replace('.', '_').replace(cookiecutter.project_namespace+'_', '') }}"
   project_name: "{{ cookiecutter.project_namespace }}'s {{ cookiecutter.project_slug }}"
 
   #
