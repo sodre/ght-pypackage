@@ -13,7 +13,6 @@ codacy:
 ght:
   template:
     url: https://github.com/sodre/ght-pypackage
-    ref: master
 
   command_line_interface:
     - (*) Click
