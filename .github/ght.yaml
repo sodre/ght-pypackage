@@ -11,6 +11,10 @@ codacy:
   project_id: CODACY_BADGE_TOKEN
 
 ght:
+  template:
+    git: https://github.com/sodre/ght-pypackage
+    ref: master
+
   command_line_interface:
     - (*) Click
     - ( ) None
