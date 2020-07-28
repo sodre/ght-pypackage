@@ -92,7 +92,7 @@ wheels: dist  ## downloads wheel dependencies
 	pip download -f dist -d wheels {{ cookiecutter.project_namespace }}-{{ cookiecutter.project_slug }}
 	ls -l wheels
 
-dist-conda:  ## builds conda-package
+dist-conda: clean  ## builds conda-package
 	conda build --no-anaconda-upload --output-folder conda-bld \
 	  -c {{ cookiecutter.anaconda_organization }} \
 	  -c conda-forge \
