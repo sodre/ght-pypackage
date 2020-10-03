@@ -96,7 +96,7 @@ dist-conda: clean  ## builds conda-package
 	conda build --no-anaconda-upload --output-folder conda-bld \
 	  -c {{ cookiecutter.anaconda_organization }} \
 	  -c conda-forge \
-	  -c anaconda .
+	  -c defaults .
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
